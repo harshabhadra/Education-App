@@ -7,9 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   WelcomePage({Key key}) : super(key: key);
-  
+
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     Widget image_carousel = new Container(
@@ -41,8 +46,7 @@ class WelcomePage extends StatelessWidget {
                   FittedBox(
                     fit: BoxFit.fitHeight,
                     child: Padding(
-                      padding:
-                          EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                      padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
                       child: Text('Welcome',
                           textScaleFactor: 1.9,
                           textAlign: TextAlign.center,
@@ -72,9 +76,8 @@ class WelcomePage extends StatelessWidget {
                             Padding(
                               padding: EdgeInsets.only(
                                   left: MediaQuery.of(context).size.width,
-                                  bottom:
-                                      MediaQuery.of(context).size.height *
-                                          0.25),
+                                  bottom: MediaQuery.of(context).size.height *
+                                      0.25),
                             ),
                             SizedBox(
                               height: 30,
@@ -100,7 +103,7 @@ class WelcomePage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               onPressed: () {
-                                Login(context, size);
+                                loginUi(context, size);
                               },
                             ),
                             SizedBox(

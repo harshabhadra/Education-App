@@ -12,14 +12,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:dio/dio.dart';
 
 bool showLoading = false;
-Login(BuildContext context, Size size) {
+loginUi(BuildContext context, Size size) {
   String _email;
   String _password;
   GlobalKey<FormState> _key = GlobalKey();
   Dio dio = Dio();
-  // Scaffold.of(context).showBottomSheet((context) {
-  //   return _loginBottomSheet(size);
-  // });
 
   showModalBottomSheet(
       context: context,
@@ -161,3 +158,73 @@ Widget _showMessage(String message, String title, BuildContext context,
     ],
   );
 }
+
+// Scaffold.of(context).showBottomSheet((context) {
+//   final bloc = LoginBloc();
+//   return BlocProvider(
+//     bloc: bloc,
+//     child: Padding(
+//       padding: MediaQuery.of(context).viewInsets,
+//       child: SingleChildScrollView(
+//         child: Stack(children: [
+//           Form(
+//             key: _key,
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: <Widget>[
+//                 Container(
+//                   child: SvgPicture.asset(
+//                     "assets/images/signup.svg",
+//                     height: size.height * 0.35,
+//                   ),
+//                 ),
+//                 SizedBox(
+//                   height: 30,
+//                 ),
+//                 RoundedInputField(
+//                   hintText: "Your Email",
+//                   onChanged: (value) {
+//                     _email = value;
+//                     print(value);
+//                   },
+//                 ),
+//                 RoundedPasswordField(
+//                   onChanged: (value) {
+//                     _password = value;
+//                     print(value);
+//                   },
+//                 ),
+//                 showLoading
+//                     ? Center(
+//                         child: Container(
+//                         child: CircularProgressIndicator(),
+//                       ))
+//                     : RoundedButton(
+//                         text: "LOGIN",
+//                         press: () {
+//                           if (_key.currentState.validate()) {
+//                             _key.currentState.save();
+//                             showLoading = true;
+
+//                             bloc.login(_email, _password, dio);
+//                           }
+//                         },
+//                       ),
+//                 SizedBox(height: size.height * 0.03),
+//                 Container(
+//                   margin: EdgeInsets.only(bottom: 32.0),
+//                   child: AlreadyHaveAnAccountCheck(
+//                     press: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                   ),
+//                 )
+//               ],
+//             ),
+//           ),
+//           _buildResult(bloc)
+//         ]),
+//       ),
+//     ),
+//   );
+// });

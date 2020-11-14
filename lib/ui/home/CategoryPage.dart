@@ -1,4 +1,7 @@
+import 'package:education_app/ui/home/Ebook/Ebook.dart';
 import 'package:education_app/ui/home/video/Video.dart';
+
+import 'package:education_app/ui/home/video/VideoPlay.dart';
 import 'package:flutter/material.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -115,10 +118,10 @@ class _CategoryPageState extends State<CategoryPage> {
                         children: <Widget>[
                           new GestureDetector(
                             onTap: () {
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => eBook()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Ebook()));
                             },
                             child: Container(
                               margin: EdgeInsets.only(

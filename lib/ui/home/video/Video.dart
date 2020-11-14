@@ -1,11 +1,10 @@
 import 'package:education_app/Bloc/VideoCategoryBloc.dart';
 import 'package:education_app/Bloc/VideoListBloc.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
-import 'package:education_app/Model/Video.dart';
 import 'package:education_app/ui/home/video/VideoList.dart';
-import 'package:education_app/ui/home/video/VideoPlay.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -31,43 +30,34 @@ class _VideoPageState extends State<VideoPage> {
     final catBloc = VideoCategoryBloc();
     catBloc.getCategories();
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[100],
         body: BlocProvider(
           bloc: bloc,
           child: SingleChildScrollView(
-            child: Stack(
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/3748552.jpg'),
-                Padding(
-                  padding: EdgeInsets.only(top: 50, left: 30),
-                  child: Text(
-                    "Video Categories",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontFamily: 'Varela_Round',
-                        fontSize: 25.0,
-                        letterSpacing: 1.0,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
                 Container(
-                  margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.height * .40),
-                  height: MediaQuery.of(context).size.height * .60,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(32.0),
-                        topRight: Radius.circular(32.0)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        // child:
-                        child: Center(child: _buildResults(catBloc))),
-                  ),
+                  width: double.infinity,
+                  height: 250,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(45),
+                        bottomRight: Radius.circular(45),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                          fit: BoxFit.fitWidth,
+                          image: AssetImage(
+                            "assets/images/3748552.jpg",
+                          ),
+                        )),
+                      )),
                 ),
+                _buildResults(catBloc)
               ],
             ),
           ),
@@ -90,45 +80,77 @@ Widget _buildResults(VideoCategoryBloc bloc) {
                     child: CircularProgressIndicator(),
                   ),
                 )
-              : GridView.count(
-                  // Create a grid with 2 columns. If you change the scrollDirection to
-                  // horizontal, this produces 2 rows.
-                  crossAxisCount: 2,
-                  children: List.generate(catList == null ? 0 : catList.length,
-                      (index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    VideoListUi(categoryName: catList[index])));
-                      },
-                      child: Card(
-                        color: Colors.indigo[50],
-                        margin: EdgeInsets.all(10.0),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(16.0),
-                                topLeft: Radius.circular(16.0))),
-                        child: Stack(
-                          children: [
-                            Container(
-                                margin: EdgeInsets.all(8.0),
-                                child: Image.asset("assets/images/video1.png")),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                height: 32.0,
-                                color: Colors.indigo[50],
-                                child: Text(catList[index]),
-                              ),
-                            )
-                          ],
-                        ),
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0, left: 16.0),
+                      child: Text(
+                        'All Categories',
+                        style: TextStyle(
+                            fontFamily: 'Varela_Round',
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
                       ),
-                    );
-                  }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: GridView.count(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        crossAxisCount: 2,
+                        children: List.generate(
+                            catList == null ? 0 : catList.length, (index) {
+                          return Container(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VideoListUi(
+                                            categoryName: catList[index])));
+                              },
+                              child: Card(
+                                color: Colors.black.withOpacity(0.5),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(16.0))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ZStack(
+                                    [
+                                      Container(
+                                          alignment: Alignment.center,
+                                          child: Image.asset(
+                                              "assets/images/21095.jpg")),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        color: Colors.black.withOpacity(0.5),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            catList[index].length < 18
+                                                ? catList[index]
+                                                : "${catList[index]}",
+                                            style: TextStyle(
+                                              fontFamily: 'Varela_Round',
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                            ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  ],
                 );
         }
       } else {
