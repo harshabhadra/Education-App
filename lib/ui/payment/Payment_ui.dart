@@ -66,7 +66,7 @@ class _PaymentUiState extends State<PaymentUi> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_nsF8Nu1mu2MKaT',
+      'key': '',
       'amount': 100,
       'name': 'Acme Corp.',
       'description': 'Fine T-Shirt',
