@@ -72,4 +72,21 @@ class _ApiClient implements ApiClient {
     final value = Videos.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<Books> getBooks() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request<Map<String, dynamic>>('/getBookInfo',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = Books.fromJson(_result.data);
+    return value;
+  }
 }

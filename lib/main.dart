@@ -1,3 +1,5 @@
+import 'package:education_app/database/DatabaseBook.dart';
+import 'package:education_app/database/DatabaseChapter.dart';
 import 'package:education_app/database/DatabaseVideo.dart';
 import 'package:education_app/ui/SplashScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,10 +12,14 @@ Future<List<Box>> _openBox() async {
   var dir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(dir.path);
   Hive.registerAdapter(DatabaseVideoListAdapter());
+  Hive.registerAdapter(DatabaseBookAdapter());
+  Hive.registerAdapter(DbChapterAdapter());
   var categoryBox = await Hive.openBox("category");
   var videoBox = await Hive.openBox("videos");
+  var bookBox = await Hive.openBox('books');
   boxList.add(categoryBox);
   boxList.add(videoBox);
+  boxList.add(bookBox);
   return boxList;
 }
 

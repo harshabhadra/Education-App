@@ -15,8 +15,21 @@ class LoginBloc implements Bloc {
     LoginResponse loginResponse;
     Login login = Login(email: email, password: password);
     try {
-      loginResponse = await apiClient.loginUser(login);
-      _controller.sink.add(loginResponse);
+      // loginResponse = await apiClient.loginUser(login);
+      // _controller.sink.add(loginResponse);
+      await apiClient.loginUser(login).then((value) {
+        loginResponse = value;
+        _controller.add(loginResponse);
+      }).catchError((error) {
+        switch (error.runtimeType) {
+          case DioError:
+            final res = (error as DioError).response;
+            print(
+                "Error status: ${res.statusCode}, Error messsage: ${res.statusMessage}");
+            _controller.addError(error);
+            break;
+        }
+      });
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");
     }

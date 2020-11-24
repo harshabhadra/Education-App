@@ -1,6 +1,7 @@
 import 'package:education_app/Model/LoginResponse.dart';
 import 'package:education_app/Model/SignUpResponse.dart';
 import 'package:education_app/Model/Video.dart';
+import 'package:education_app/Model/books_model.dart';
 import 'package:education_app/Network/Login.dart';
 import 'package:education_app/Network/SignUp.dart';
 import 'package:retrofit/retrofit.dart';
@@ -22,4 +23,7 @@ abstract class ApiClient {
 
   @GET("/getAllVideo")
   Future<Videos> getVideos();
+
+  @GET("/getBookInfo")
+  Future<Books> getBooks();
 }

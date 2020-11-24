@@ -1,3 +1,8 @@
+import 'package:education_app/Bloc/Repository.dart';
+import 'package:education_app/Bloc/bloc_provider.dart';
+import 'package:education_app/Bloc/books_cache_bloc.dart';
+import 'package:education_app/database/DatabaseBook.dart';
+import 'package:education_app/ui/home/Ebook/EbookDetails.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:random_color/random_color.dart';
@@ -10,6 +15,15 @@ class Ebook extends StatefulWidget {
 }
 
 class _EbookState extends State<Ebook> {
+  final bloc = BooksCacheBloc();
+
+  @override
+  void initState() {
+    Repository().refreshBooks();
+    bloc.getBooks();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,97 +32,160 @@ class _EbookState extends State<Ebook> {
         elevation: 0,
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        physics: ClampingScrollPhysics(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(45),
-                bottomRight: Radius.circular(45),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    tileMode: TileMode.repeated,
-                    colors: [kPrimaryColor, Colors.deepPurpleAccent],
-                  ),
+      body: BlocProvider(
+        bloc: bloc,
+        child: SingleChildScrollView(
+          physics: ClampingScrollPhysics(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(45),
+                  bottomRight: Radius.circular(45),
                 ),
-                width: double.infinity,
-                height: 180,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 0, 24),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'EBooks',
-                          style: TextStyle(
-                              fontFamily: 'Varela_Round',
-                              fontSize: 48,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Today a reader, tomorrow a leader',
-                          style: TextStyle(
-                              fontFamily: 'Varela_Round',
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      tileMode: TileMode.repeated,
+                      colors: [kPrimaryColor, Colors.deepPurpleAccent],
+                    ),
+                  ),
+                  width: double.infinity,
+                  height: 180,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 0, 24),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'EBooks',
+                            style: TextStyle(
+                                fontFamily: 'Varela_Round',
+                                fontSize: 48,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'Today a reader, tomorrow a leader',
+                            style: TextStyle(
+                                fontFamily: 'Varela_Round',
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.all(16),
-              child: Text('All Categories',
-                  style: TextStyle(
-                      fontFamily: 'Varela_Round',
-                      fontSize: 24,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold)),
-            ),
-            _buildEbooks()
-          ],
+              Container(
+                margin: EdgeInsets.all(16),
+                child: Text('All Books',
+                    style: TextStyle(
+                        fontFamily: 'Varela_Round',
+                        fontSize: 24,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold)),
+              ),
+              _buildEbooks(bloc, context)
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-Widget _buildEbooks() {
-  RandomColor _randomColor = RandomColor();
+Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
+  return StreamBuilder(
+      stream: bloc.booksStream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.hasError) {
+            return Text(snapshot.error.toString());
+          } else if (snapshot.hasData) {
+            List<DatabaseBook> bookList = snapshot.data;
+            print('book list size in ui: ${bookList.length}');
+            return _buildBookList(bookList, context);
+          } else {
+            return Center(
+              child: Text('snap shot has no data'),
+            );
+          }
+        } else {
+          print(
+              'Snapshot connection state: ${snapshot.connectionState.toString()}');
+          return Center(
+            child: Container(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      });
+}
 
+Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
+  bool isChapter = false;
+
+  RandomColor _randomColor = RandomColor();
   return GridView.count(
     physics: ScrollPhysics(),
     shrinkWrap: true,
     crossAxisCount: 2,
-    children: List.generate(10, (index) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-          child: Container(
-            color: _randomColor.randomColor(),
-            child: Center(
-              child: Text(
-                'Category $index',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: 'Varela_Round',
-                    fontSize: 20),
-              ),
+    children: List.generate(books.length, (index) {
+      books[index].listOfChapter.isNotEmpty
+          ? isChapter = false
+          : isChapter = true;
+      return InkWell(
+        splashColor: Colors.white,
+        onTap: () {
+          if (isChapter) {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => EBookDetails(ebook: books[index])));
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+            child: Container(
+              color: _randomColor.randomColor(),
+              child: Stack(children: [
+                Center(
+                  child: Text(
+                    '${books[index].bookName}',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Varela_Round',
+                        fontSize: 20),
+                  ),
+                ),
+                if (isChapter)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      margin: EdgeInsets.all(8),
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 8, left: 8, top: 4, bottom: 4),
+                        child: Text('PREVIEW ONLY',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Varela_Round',
+                                fontSize: 16)),
+                      ),
+                    ),
+                  )
+              ]),
             ),
           ),
         ),
