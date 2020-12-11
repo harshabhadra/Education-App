@@ -7,26 +7,28 @@ import 'package:education_app/database/DatabaseVideo.dart';
 import 'package:hive/hive.dart';
 
 class VideoListBloc implements Bloc {
-  final _controller = StreamController<List<VideoList>>();
+  final _controller = StreamController<List<String>>();
 
-  Stream<List<VideoList>> get videosStream => _controller.stream;
+  Stream<List<String>> get videosStream => _controller.stream;
 
   void getVideos(Dio dio) async {
     var box = Hive.box('category');
     var videoBox = Hive.box('videos');
 
-    var catList = <String>{};
-    var pCatList = <String>{};
+    var catList = List<String>();
     var dbVideoList = <DatabaseVideoList>{};
 
     if (videoBox.isNotEmpty) {
-      for (var i = 0; i < box.length; i++) {
-        dbVideoList.add(box.getAt(i));
+      for (var i = 0; i < videoBox.length; i++) {
+        dbVideoList.add(videoBox.getAt(i));
       }
     }
 
     if (box.isNotEmpty) {
-      catList = box.get('cat');
+      var list = box.get('cat');
+      print('no. of categories: ' + box.length.toString());
+      catList.addAll(list);
+      _controller.sink.add(catList);
     }
 
     ApiClient apiClient = ApiClient(dio);
@@ -52,13 +54,13 @@ class VideoListBloc implements Bloc {
       }
 
       if (box.isEmpty) {
-        box.put('cat', catList.toList());
+        box.put('cat', catList);
+        _controller.sink.add(catList);
       } else {
         box.clear();
         box.delete('cat');
-        box.put('cat', catList.toList());
+        box.put('cat', catList);
       }
-      _controller.sink.add(videoList);
     } catch (error, stacktrace) {
       print("Exception occured: $error stackTrace: $stacktrace");
     }

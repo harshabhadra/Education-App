@@ -1,7 +1,11 @@
+import 'package:education_app/Bloc/LoginBloc.dart';
+import 'package:education_app/Model/LoginResponse.dart';
+import 'package:education_app/database/DatabaseLogin.dart';
+import 'package:education_app/ui/home/HomeScreen.dart';
 import 'package:education_app/ui/welcome/welcomepage.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:splashscreen/splashscreen.dart';
+import 'package:hive/hive.dart';
 
 class Splash extends StatefulWidget {
   Splash({Key key}) : super(key: key);
@@ -11,22 +15,63 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  var box = Hive.box('user');
+  DatabaseLogin databaseLogin;
+  LoginResponse loginResponse;
+  @override
+  void initState() {
+    if (box.isNotEmpty) {
+      databaseLogin = box.getAt(0);
+      LoginBloc bloc = LoginBloc();
+      bloc.login(databaseLogin.email, databaseLogin.password);
+      bloc.loginStream.listen((event) {
+        LoginResponse response = event;
+         Future.delayed(const Duration(seconds: 3), () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return Home(loginResponse: response,);
+          }));
+        });
+      });
+      });
+    } else {
+      databaseLogin = null;
+      Future.delayed(const Duration(seconds: 5), () {
+        setState(() {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return WelcomePage();
+          }));
+        });
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new SplashScreen(
-      seconds: 5,
-      routeName: '/',
-      navigateAfterSeconds: WelcomePage(),
-      title: Text(
-        'Study Doc.',
-        textScaleFactor: 1.5,
-        textAlign: TextAlign.center,
-        style: TextStyle(letterSpacing: 1.2, fontSize: 15, color: Colors.white),
-      ),
-      image: Image.asset('assets/images/splash.jpg'),
+    return Scaffold(
       backgroundColor: kPrimaryColor,
-      styleTextUnderTheLoader: TextStyle(),
-      photoSize: 100.0,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(32, 64, 32, 64),
+            child: Image.asset('assets/images/splash.jpg'),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Study Doc',
+              style: TextStyle(fontSize: 24, color: Colors.white),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 64),
+            child: Center(
+              child: CircularProgressIndicator(backgroundColor: Colors.white),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

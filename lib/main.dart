@@ -1,5 +1,6 @@
 import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/database/DatabaseChapter.dart';
+import 'package:education_app/database/DatabaseLogin.dart';
 import 'package:education_app/database/DatabaseVideo.dart';
 import 'package:education_app/ui/SplashScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,12 +15,17 @@ Future<List<Box>> _openBox() async {
   Hive.registerAdapter(DatabaseVideoListAdapter());
   Hive.registerAdapter(DatabaseBookAdapter());
   Hive.registerAdapter(DbChapterAdapter());
+  Hive.registerAdapter(DatabaseLoginAdapter());
   var categoryBox = await Hive.openBox("category");
   var videoBox = await Hive.openBox("videos");
   var bookBox = await Hive.openBox('books');
+  var userBox = await Hive.openBox('user');
+  var credBox = await Hive.openBox('cred');
   boxList.add(categoryBox);
   boxList.add(videoBox);
   boxList.add(bookBox);
+  boxList.add(userBox);
+  boxList.add(credBox);
   return boxList;
 }
 

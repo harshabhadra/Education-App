@@ -1,4 +1,5 @@
 import 'package:education_app/ui/home/video/VideoPlay.dart';
+import 'package:education_app/ui/home/video/video_play_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -108,7 +109,7 @@ Widget _buildList(List<DatabaseVideoList> list, String catName) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => VideoApp(
+                          builder: (context) => VideoPlayUi(
                                 video: videoList.toList()[index],
                               )));
                 },

@@ -89,4 +89,24 @@ class _ApiClient implements ApiClient {
     final value = Books.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<StudentInfoResponse> setStudentInfo(studentInfo) async {
+    ArgumentError.checkNotNull(studentInfo, 'studentInfo');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(studentInfo?.toJson() ?? <String, dynamic>{});
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request<Map<String, dynamic>>('/studentInfo',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = StudentInfoResponse.fromJson(_result.data);
+    return value;
+  }
 }

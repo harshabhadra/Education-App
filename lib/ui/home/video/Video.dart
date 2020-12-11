@@ -27,8 +27,8 @@ class _VideoPageState extends State<VideoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final catBloc = VideoCategoryBloc();
-    catBloc.getCategories();
+    // final catBloc = VideoCategoryBloc();
+    // catBloc.getCategories();
     return Scaffold(
         backgroundColor: Colors.grey[100],
         body: BlocProvider(
@@ -57,7 +57,7 @@ class _VideoPageState extends State<VideoPage> {
                         )),
                       )),
                 ),
-                _buildResults(catBloc)
+                _buildResults(bloc)
               ],
             ),
           ),
@@ -65,9 +65,9 @@ class _VideoPageState extends State<VideoPage> {
   }
 }
 
-Widget _buildResults(VideoCategoryBloc bloc) {
+Widget _buildResults(VideoListBloc bloc) {
   return StreamBuilder(
-    stream: bloc.categoryListStream,
+    stream: bloc.videosStream,
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.active) {
         if (snapshot.hasError) {

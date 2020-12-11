@@ -27,6 +27,7 @@ class BooksCacheBloc implements Bloc {
       ApiClient apiClient = ApiClient(dio);
       try {
         var response = await apiClient.getBooks();
+        print('Book  request response: ' + response.toJson().toString());
         var books = response.bookList;
         for (var book in books) {
           var dbBook = DatabaseBook(

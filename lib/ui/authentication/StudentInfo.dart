@@ -1,7 +1,17 @@
+import 'package:education_app/Network/studentinfo.dart';
+import 'package:education_app/ui/home/HomeScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import 'package:education_app/Bloc/bloc_provider.dart';
+import 'package:education_app/Bloc/student_info_bloc.dart';
+import 'package:education_app/Model/LoginResponse.dart';
+import 'package:education_app/Model/student_info_response.dart';
 import 'package:education_app/ui/components/rounded_button.dart';
 import 'package:education_app/ui/components/rounded_input_field.dart';
+import 'package:education_app/ui/components/text_field_container.dart';
 import 'package:education_app/utils/constants.dart';
-import 'package:flutter/material.dart';
 
 String name;
 String contactNumber;
@@ -10,6 +20,7 @@ String address;
 String country;
 String profDetals;
 String dob;
+String email;
 
 class ListItem {
   int value;
@@ -18,25 +29,36 @@ class ListItem {
   ListItem(this.value, this.name);
 }
 
-class StudentInfo extends StatefulWidget {
-  StudentInfo({Key key}) : super(key: key);
+class StudentInfoUi extends StatefulWidget {
+  final LoginResponse loginResponse;
+  final String email;
+  const StudentInfoUi({Key key, this.loginResponse, this.email})
+      : super(key: key);
+
   @override
   _StudentInfoState createState() => _StudentInfoState();
 }
 
-class _StudentInfoState extends State<StudentInfo> {
+class _StudentInfoState extends State<StudentInfoUi> {
+  //Initializing mask for Dob
+  var dobFormatter = MaskTextInputFormatter(
+    mask: '##/##/####',
+  );
+
+  //Initializing mask for mobile number
+  var numberFormatter = MaskTextInputFormatter(mask: '##########');
+  bool showLoading;
+
   GlobalKey<FormState> _key = GlobalKey();
   List<ListItem> _dropdownItems = [
-    ListItem(1, "GENDER"),
-    ListItem(2, "Male"),
+    ListItem(1, "Male"),
     ListItem(3, "Female"),
     //ListItem(4, "Fourth Item")
   ];
 
   List<ListItem> _dropdownItems1 = [
-    ListItem(1, "Professional"),
-    ListItem(2, "Medical"),
-    ListItem(3, "Medcal student"),
+    ListItem(1, "MBBS"),
+    ListItem(2, "MS"),
     //ListItem(4, "Fourth Item")
   ];
 
@@ -48,11 +70,14 @@ class _StudentInfoState extends State<StudentInfo> {
 
   void initState() {
     super.initState();
+    showLoading = false;
     _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
     _selectedItem = _dropdownMenuItems[0].value;
+    gender = _selectedItem.name;
 
     _dropdownMenuItems1 = buildDropDownMenuItems(_dropdownItems1);
     _selectedItem1 = _dropdownMenuItems1[0].value;
+    profDetals = _selectedItem1.name;
   }
 
   List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
@@ -70,6 +95,7 @@ class _StudentInfoState extends State<StudentInfo> {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = StudentInfoBloc();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -87,128 +113,192 @@ class _StudentInfoState extends State<StudentInfo> {
         elevation: 0,
       ),
       backgroundColor: kPrimaryColor,
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        child: SingleChildScrollView(
-          child: Form(
-            key: _key,
-            child: Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(60))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.1,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: RoundedInputField(
-                        hintText: "Full Name",
-                        onChanged: (value) {
-                          // _email = value;
-                          print(value);
-                        },
+      body: BlocProvider(
+        bloc: bloc,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Form(
+              key: _key,
+              child: Card(
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.only(topRight: Radius.circular(60))),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: RoundedInputField(
-                        icon: Icons.phone_android_outlined,
-                        hintText: "Phone Number",
-                        onChanged: (value) {
-                          // _email = value;
-                          print(value);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        width: 320,
-                        height: 60,
-                        padding: const EdgeInsets.only(left: 30.0, right: 20.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25.0),
-                            border: Border.all()),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              value: _selectedItem,
-                              items: _dropdownMenuItems,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedItem = value;
-                                });
-                              }),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: RoundedInputField(
+                          hintText: "Full Name",
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              name = value;
+                            }
+                          },
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: RoundedInputField(
-                        icon: Icons.location_city_outlined,
-                        hintText: "City Name",
-                        onChanged: (value) {
-                          // _email = value;
-                          print(value);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: RoundedInputField(
-                        icon: Icons.location_on_outlined,
-                        hintText: "Country",
-                        onChanged: (value) {
-                          // _email = value;
-                          print(value);
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        width: 320,
-                        height: 60,
-                        padding: const EdgeInsets.only(left: 30.0, right: 20.0),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25.0),
-                            border: Border.all()),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                              value: _selectedItem1,
-                              items: _dropdownMenuItems1,
+                      Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TextFieldContainer(
+                            child: TextFormField(
+                              inputFormatters: [numberFormatter],
+                              keyboardType: TextInputType.datetime,
+                              cursorColor: kPrimaryColor,
+                              style: TextStyle(fontSize: 18.0),
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons.calendar_today_outlined,
+                                      color: kPrimaryColor),
+                                  hintText: 'Mobile Number',
+                                  helperText: 'Eg: 999-999-9999',
+                                  border: InputBorder.none),
                               onChanged: (value) {
-                                setState(() {
-                                  _selectedItem1 = value;
-                                });
-                              }),
+                                if (value.isNotEmpty) {
+                                  contactNumber = value;
+                                }
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'This Field Cannot be Empty';
+                                }
+                                return null;
+                              },
+                            ),
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          width: 320,
+                          height: 60,
+                          padding:
+                              const EdgeInsets.only(left: 30.0, right: 20.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25.0),
+                              border: Border.all()),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                value: _selectedItem,
+                                items: _dropdownMenuItems,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedItem = value;
+                                    gender = _selectedItem.name;
+                                  });
+                                }),
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10, top: 10),
-                      child: RoundedInputField(
-                        icon: Icons.date_range,
-                        hintText: "Date of Birth",
-                        onChanged: (value) {
-                          // _email = value;
-                          print(value);
-                        },
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: RoundedInputField(
+                          icon: Icons.location_city_outlined,
+                          hintText: "Address",
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              address = value;
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    RoundedButton(
-                      text: 'Submit',
-                      press: () {
-                        if (_key.currentState.validate()) {
-                          _key.currentState.save();
-                        }
-                      },
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10, top: 10),
+                        child: RoundedInputField(
+                          icon: Icons.location_on_outlined,
+                          hintText: "Country",
+                          onChanged: (value) {
+                            // _email = value;
+                            if (value.isNotEmpty) {
+                              country = value;
+                            }
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFieldContainer(
+                          child: TextFormField(
+                            inputFormatters: [dobFormatter],
+                            keyboardType: TextInputType.datetime,
+                            cursorColor: kPrimaryColor,
+                            style: TextStyle(fontSize: 18.0),
+                            decoration: InputDecoration(
+                                icon: Icon(Icons.calendar_today_outlined,
+                                    color: kPrimaryColor),
+                                hintText: 'Date of Birth',
+                                border: InputBorder.none),
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                dob = value;
+                              }
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return 'This Field Cannot be Empty';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          width: 320,
+                          height: 60,
+                          padding:
+                              const EdgeInsets.only(left: 30.0, right: 20.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(25.0),
+                              border: Border.all()),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                                hint: Text('Exam Type'),
+                                value: _selectedItem1,
+                                items: _dropdownMenuItems1,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedItem1 = value;
+                                    profDetals = _selectedItem1.name;
+                                  });
+                                }),
+                          ),
+                        ),
+                      ),
+                      showLoading
+                          ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          )
+                          : RoundedButton(
+                              text: 'Submit',
+                              press: () {
+                                if (_key.currentState.validate()) {
+                                  _key.currentState.save();
+                                  StudentInfo studentInfo = StudentInfo(
+                                      email: widget.email,
+                                      name: name,
+                                      contactNumber: int.parse(contactNumber),
+                                      address: address,
+                                      country: country,
+                                      dob: dob,
+                                      profDetails: profDetals);
+
+                                  bloc.setStudentInfo(studentInfo);
+                                  submitStudentInfo(bloc);
+                                  print("Gender : " + gender);
+                                }
+                              },
+                            ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -216,5 +306,27 @@ class _StudentInfoState extends State<StudentInfo> {
         ),
       ),
     );
+  }
+
+  Future submitStudentInfo(StudentInfoBloc bloc) async {
+    setState(() {
+      showLoading = true;
+      bloc.studentInfoStream.listen((event) {
+        StudentInfoResponse response = event;
+        setState(() {
+          showLoading = false;
+          if (response.statusCode == 100) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return Home(loginResponse: widget.loginResponse);
+              }), (route) => false);
+            });
+          } else {
+            print(response.message);
+          }
+        });
+      });
+    });
   }
 }
