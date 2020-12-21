@@ -5,6 +5,7 @@ import 'package:education_app/ui/home/HomeScreen.dart';
 import 'package:education_app/ui/welcome/welcomepage.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hive/hive.dart';
 
 class Splash extends StatefulWidget {
@@ -26,21 +27,27 @@ class _SplashState extends State<Splash> {
       bloc.login(databaseLogin.email, databaseLogin.password);
       bloc.loginStream.listen((event) {
         LoginResponse response = event;
-         Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return Home(loginResponse: response,);
-          }));
+        Future.delayed(const Duration(seconds: 3), () {
+          setState(() {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return Home(loginResponse: response);
+              }), (route) => false);
+            });
+          });
         });
-      });
       });
     } else {
       databaseLogin = null;
       Future.delayed(const Duration(seconds: 5), () {
         setState(() {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return WelcomePage();
-          }));
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) {
+                return WelcomePage();
+              }), (route) => false);
+            });
         });
       });
     }
