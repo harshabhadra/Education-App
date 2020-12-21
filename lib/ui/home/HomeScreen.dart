@@ -1,3 +1,5 @@
+import 'package:education_app/ui/home/exam/exam_info_ui.dart';
+import 'package:education_app/ui/home/video/Video.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,10 +30,10 @@ class _HomeState extends State<Home> {
         child = CategoryPage();
         break;
       case 1:
-        child = HomePage();
+        child = VideoPage();
         break;
       case 2:
-        child = FlutterLogo();
+        child = ExamInfoScreen();
         break;
       case 3:
         child = ProfilePage();

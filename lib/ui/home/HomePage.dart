@@ -5,13 +5,6 @@ import 'dart:convert';
 
 class HomePage extends StatelessWidget {
   
-  String demoBookLink(dynamic BookList) {
-    print('++++++++++++++++++++++++++++++++++++');
-    String bookListId = BookList.keys.toList()[0];
-    print(BookList[bookListId]['demoBookLink']);
-
-    return BookList[bookListId]['demoBookLink'];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +34,7 @@ class HomePage extends StatelessWidget {
           FutureBuilder<List<dynamic>>(
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                print(demoBookLink(snapshot.data[0]));
-                print('*********************************');
+            
                 return new ListView.builder(
                     //scrollDirection:Axis.horizontal,
                     shrinkWrap: true,

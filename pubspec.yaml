@@ -47,7 +47,8 @@ dependencies:
   flutter_full_pdf_viewer: ^1.0.6
   mask_text_input_formatter: ^1.1.0
   vimeoplayer: ^0.1.8
-  flutter_youtube_vimeo: ^0.0.1
+  expandable: ^4.1.4
+  flutter_staggered_animations: "^0.1.2"
 
 dev_dependencies:
   flutter_test:

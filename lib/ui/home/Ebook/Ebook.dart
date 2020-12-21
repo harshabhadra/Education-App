@@ -157,9 +157,15 @@ Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(16)),
             child: Container(
-              color: _randomColor.randomColor(),
+              color: _randomColor.randomColor(
+                  colorBrightness: ColorBrightness.primary,
+                  colorSaturation: ColorSaturation.lowSaturation,
+                  colorHue: ColorHue.multiple(
+                      colorHues: [ColorHue.blue, ColorHue.purple])),
               child: Stack(children: [
-                Center(
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.all(10.0),
                   child: Text(
                     '${books[index].bookName}',
                     style: TextStyle(

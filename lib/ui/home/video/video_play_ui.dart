@@ -1,7 +1,6 @@
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:vimeoplayer/vimeoplayer.dart';
-
 import 'package:education_app/database/DatabaseVideo.dart';
 
 class VideoPlayUi extends StatefulWidget {

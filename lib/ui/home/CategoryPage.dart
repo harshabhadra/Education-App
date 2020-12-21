@@ -1,4 +1,5 @@
 import 'package:education_app/ui/home/Ebook/Ebook.dart';
+import 'package:education_app/ui/home/exam/exam_info_ui.dart';
 import 'package:education_app/ui/home/video/Video.dart';
 
 import 'package:education_app/ui/home/video/VideoPlay.dart';
@@ -172,7 +173,10 @@ class _CategoryPageState extends State<CategoryPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           new GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ExamInfoScreen()));
+                            },
                             child: Container(
                               margin: EdgeInsets.only(
                                   left: 5,

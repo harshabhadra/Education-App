@@ -9,7 +9,6 @@ part of 'ApiClient.dart';
 class _ApiClient implements ApiClient {
   _ApiClient(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
-    baseUrl ??= 'http://arnabbhadra29.pythonanywhere.com';
   }
 
   final Dio _dio;
@@ -37,14 +36,14 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<LoginResponse> loginUser(login) async {
+  Future<HttpResponse<String>> loginUser(login) async {
     ArgumentError.checkNotNull(login, 'login');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(login?.toJson() ?? <String, dynamic>{});
     _data.removeWhere((k, v) => v == null);
-    final _result = await _dio.request<Map<String, dynamic>>('/login',
+    final _result = await _dio.request<String>('/login',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'POST',
@@ -52,8 +51,9 @@ class _ApiClient implements ApiClient {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = LoginResponse.fromJson(_result.data);
-    return value;
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override
@@ -108,5 +108,23 @@ class _ApiClient implements ApiClient {
         data: _data);
     final value = StudentInfoResponse.fromJson(_result.data);
     return value;
+  }
+
+  @override
+  Future<HttpResponse<String>> getAllExamInfo() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request<String>('/getAllExamInfo',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 }
