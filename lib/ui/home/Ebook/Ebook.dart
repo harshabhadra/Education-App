@@ -138,7 +138,7 @@ Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
 
   RandomColor _randomColor = RandomColor();
   return AnimationLimiter(
-      child: GridView.count(
+    child: GridView.count(
       physics: ScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 2,
@@ -150,54 +150,59 @@ Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
           position: index,
           duration: const Duration(milliseconds: 1000),
           columnCount: 2,
-                  child: InkWell(
-            splashColor: Colors.white,
-            onTap: () {
-              if (isChapter) {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => EBookDetails(ebook: books[index])));
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
-                child: Container(
-                  color: _randomColor.randomColor(
-                      colorBrightness: ColorBrightness.primary,
-                      colorSaturation: ColorSaturation.lowSaturation,
-                      colorHue: ColorHue.multiple(
-                          colorHues: [ColorHue.blue, ColorHue.purple])),
-                  child: Stack(children: [
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      child: Text(
-                        '${books[index].bookName}',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Varela_Round',
-                            fontSize: 20),
-                      ),
-                    ),
-                    if (!isChapter)
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Container(
-                          margin: EdgeInsets.all(8),
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 8, left: 8, top: 4, bottom: 4),
-                            child: Text('PREVIEW ONLY',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Varela_Round',
-                                    fontSize: 16)),
+          child: ScaleAnimation(
+            child: FadeInAnimation(
+              child: InkWell(
+                splashColor: Colors.white,
+                onTap: () {
+                  if (isChapter) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            EBookDetails(ebook: books[index])));
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                    child: Container(
+                      color: _randomColor.randomColor(
+                          colorBrightness: ColorBrightness.primary,
+                          colorSaturation: ColorSaturation.lowSaturation,
+                          colorHue: ColorHue.multiple(
+                              colorHues: [ColorHue.blue, ColorHue.purple])),
+                      child: Stack(children: [
+                        Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.all(10.0),
+                          child: Text(
+                            '${books[index].bookName}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Varela_Round',
+                                fontSize: 20),
                           ),
                         ),
-                      )
-                  ]),
+                        if (!isChapter)
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Container(
+                              margin: EdgeInsets.all(8),
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    right: 8, left: 8, top: 4, bottom: 4),
+                                child: Text('PREVIEW ONLY',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontFamily: 'Varela_Round',
+                                        fontSize: 16)),
+                              ),
+                            ),
+                          )
+                      ]),
+                    ),
+                  ),
                 ),
               ),
             ),
