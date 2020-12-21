@@ -22,6 +22,7 @@ class _PaymentUiState extends State<PaymentUi> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // bloc.getOrderId(100);
     super.initState();
   }
 
@@ -48,6 +49,9 @@ class _PaymentUiState extends State<PaymentUi> {
         onPressed: () {
           openCheckout();
         },
+        child: Icon(
+         Icons.payment 
+        ),
       ),
     );
   }
@@ -99,12 +103,12 @@ Widget _buildResult(PaymentBloc bloc) {
             );
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+             child: Text("CheckOut Details"),
             );
           }
         } else {
           return Center(
-            child: CircularProgressIndicator(),
+            child: Text("CheckOut Details"),
           );
         }
       });

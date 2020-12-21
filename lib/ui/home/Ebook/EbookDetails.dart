@@ -20,10 +20,11 @@ class EBookDetails extends StatefulWidget {
 
 class _EBookDetailsState extends State<EBookDetails> {
   List<DbChapter> chapterList;
-  bool showLoading;
+  bool enable;
   @override
   void initState() {
     chapterList = widget.ebook.listOfChapter;
+    enable = true;
     super.initState();
   }
 
@@ -89,7 +90,10 @@ class _EBookDetailsState extends State<EBookDetails> {
             ),
             InkWell(
               onTap: () {
-                _launchURL(widget.ebook.demoBookLink, 'Demo');
+                if (enable) _launchURL(widget.ebook.demoBookLink, 'Demo');
+                setState(() {
+                  enable = false;
+                });
               },
               child: Container(
                 margin: EdgeInsets.all(16),
@@ -210,6 +214,7 @@ class _EBookDetailsState extends State<EBookDetails> {
   _launchURL(String url, String title) async {
     createFileOfPdfUrl(url).then((value) {
       setState(() {
+        enable = true;
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return ChapterUi(url: value.path, title: title);
         }));
