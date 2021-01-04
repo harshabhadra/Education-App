@@ -43,11 +43,11 @@ class _SplashState extends State<Splash> {
       Future.delayed(const Duration(seconds: 5), () {
         setState(() {
           SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) {
-                return WelcomePage();
-              }), (route) => false);
-            });
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+              return WelcomePage();
+            }), (route) => false);
+          });
         });
       });
     }
@@ -58,26 +58,28 @@ class _SplashState extends State<Splash> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(32, 64, 32, 64),
-            child: Image.asset('assets/images/splash.jpg'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Study Doc',
-              style: TextStyle(fontSize: 24, color: Colors.white),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(32, 64, 32, 64),
+              child: Image.asset('assets/images/splash.jpg'),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 64),
-            child: Center(
-              child: CircularProgressIndicator(backgroundColor: Colors.white),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Study Doc',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
             ),
-          )
-        ],
+            Container(
+              margin: EdgeInsets.only(top: 64),
+              child: Center(
+                child: CircularProgressIndicator(backgroundColor: Colors.white),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

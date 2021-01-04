@@ -15,10 +15,17 @@ class ExamInfoBloc extends Bloc {
   Stream get examInfoStream => _controller.stream;
 
   void getExamInfo() async {
+    Repository repository = Repository();
+    //Initializing Dio
+    await repository.refreshToken().whenComplete(() {
+      getExams();
+    });
+  }
+
+  void getExams() async {
     Map<String, dynamic> map = new Map<String, dynamic>();
     ExamInfo exam;
     ErrorModel errorModel;
-    //Initializing Dio
     Dio dio = Dio();
     ApiClient apiClient = ApiClient(dio);
     try {
@@ -37,7 +44,7 @@ class ExamInfoBloc extends Bloc {
             errorType: ErrorType.APIError);
         map['exam'] = null;
         map['error'] = errorModel;
-          _controller.sink.add(map);
+        _controller.sink.add(map);
       } else {
         errorModel = ErrorModel(
             title: "Unknown",
@@ -45,7 +52,7 @@ class ExamInfoBloc extends Bloc {
             errorType: ErrorType.Unknown);
         map['exam'] = null;
         map['error'] = errorModel;
-          _controller.sink.add(map);
+        _controller.sink.add(map);
       }
     } catch (error) {
       print("Exam info error: " + error.toString());
@@ -55,6 +62,5 @@ class ExamInfoBloc extends Bloc {
   @override
   void dispose() {
     _controller.close();
-    // TODO: implement dispose
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:education_app/Bloc/Bloc.dart';
+import 'package:education_app/Bloc/Repository.dart';
 import 'package:education_app/Model/Video.dart';
 import 'package:dio/dio.dart';
 import 'package:education_app/Network/ApiClient.dart';
@@ -12,6 +13,12 @@ class VideoListBloc implements Bloc {
   Stream<List<String>> get videosStream => _controller.stream;
 
   void getVideos(Dio dio) async {
+    Repository repository = Repository();
+
+    await repository.refreshToken().whenComplete(() => getAllVideos(dio));
+  }
+
+  void getAllVideos(Dio dio) async {
     var box = Hive.box('category');
     var videoBox = Hive.box('videos');
 

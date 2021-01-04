@@ -1,15 +1,12 @@
-import 'package:education_app/Model/LoginResponse.dart';
 import 'package:education_app/Model/SignUpResponse.dart';
 import 'package:education_app/Model/Video.dart';
 import 'package:education_app/Model/books_model.dart';
-import 'package:education_app/Model/exam_info.dart';
 import 'package:education_app/Model/student_info_response.dart';
 import 'package:education_app/Network/Login.dart';
 import 'package:education_app/Network/SignUp.dart';
 import 'package:education_app/Network/api_interceptor.dart';
+import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/studentinfo.dart';
-import 'package:http/http.dart';
-
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'ApiClient.g.dart';
@@ -39,4 +36,13 @@ abstract class ApiClient {
 
   @GET("/getAllExamInfo")
   Future<HttpResponse<String>> getAllExamInfo();
+
+  @POST("/refreshToken")
+  Future<HttpResponse<String>> refreshToken(@Body() String refreshTokenRequest);
+
+  @POST("/getStudentInfo")
+  Future<HttpResponse<String>>getStudentProfile(@Body()String profileRequest);
+
+  @POST("/getAllQuestionByExam")
+  Future<HttpResponse<String>>getQuestions(@Body() QuestionsRequest questionRequest);
 }

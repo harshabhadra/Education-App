@@ -1,4 +1,3 @@
-import 'package:education_app/ui/home/video/VideoPlay.dart';
 import 'package:education_app/ui/home/video/video_play_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -44,19 +43,21 @@ class _VideoListState extends State<VideoListUi> {
               ),
             ),
           ),
-          body: ZStack([
-            Container(
-              height: 64,
-              margin: EdgeInsets.only(bottom: 32),
-            color: kPrimaryColor,
-            ),
-            ClipRRect(
-              borderRadius: BorderRadius.only(topRight: Radius.circular(40)),
-              child: Container(
-                  color: Colors.white,
-                  child: _buildVideos(vBloc, widget.categoryName)),
-            ),
-          ])),
+          body: SafeArea(
+            child: ZStack([
+              Container(
+                height: 64,
+                margin: EdgeInsets.only(bottom: 32),
+                color: kPrimaryColor,
+              ),
+              ClipRRect(
+                borderRadius: BorderRadius.only(topRight: Radius.circular(40)),
+                child: Container(
+                    color: Colors.white,
+                    child: _buildVideos(vBloc, widget.categoryName)),
+              ),
+            ]),
+          )),
     );
   }
 }
@@ -98,8 +99,8 @@ Widget _buildList(List<DatabaseVideoList> list, String catName) {
           ),
         )
       : Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView.separated(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.separated(
             shrinkWrap: true,
             itemCount: videoList == null ? 0 : videoList.length,
             separatorBuilder: (context, builder) => Divider(color: Colors.grey),
@@ -146,5 +147,5 @@ Widget _buildList(List<DatabaseVideoList> list, String catName) {
               );
             },
           ),
-      );
+        );
 }

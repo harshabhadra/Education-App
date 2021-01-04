@@ -1,8 +1,8 @@
-import 'package:education_app/Bloc/Repository.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Bloc/exam_info_bloc.dart';
 import 'package:education_app/Model/error_model.dart';
 import 'package:education_app/Model/exam_info.dart';
+import 'package:education_app/ui/home/exam/start_exam_ui.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -22,7 +22,6 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
   @override
   void initState() {
     bloc = ExamInfoBloc();
-
     bloc.getExamInfo();
     super.initState();
   }
@@ -39,35 +38,37 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: BlocProvider(
-          bloc: bloc,
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                children: [
-                  Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(45),
-                        bottomRight: Radius.circular(45),
+      body: SafeArea(
+        child: BlocProvider(
+            bloc: bloc,
+            child: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Container(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(45),
+                          bottomRight: Radius.circular(45),
+                        ),
+                        child: Container(
+                            color: Colors.blue[50],
+                            width: MediaQuery.of(context).size.width,
+                            height: 200,
+                            child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: SvgPicture.asset(
+                                    'assets/images/online_test.svg'))),
                       ),
-                      child: Container(
-                          color: Colors.blue[50],
-                          width: MediaQuery.of(context).size.width,
-                          height: 200,
-                          child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                  'assets/images/online_test.svg'))),
                     ),
-                  ),
-                  Container(child: _buildResults(bloc)),
-                ],
+                    Container(child: _buildResults(bloc)),
+                  ],
+                ),
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
 
@@ -137,10 +138,15 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
               end: Offset(0, 0),
             ).animate(CurvedAnimation(
                 parent: animation,
-                curve: Curves.easeInCubic,
-                reverseCurve: Curves.bounceOut)),
+                curve: Curves.easeInSine,
+                reverseCurve: Curves.easeIn)),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return StartExamScreen(exam: examList[index]);
+                }));
+              },
               child: Card(
                 color: _randomColor.randomColor(
                     colorBrightness: ColorBrightness.primary,

@@ -48,132 +48,135 @@ class _VideoAppState extends State<VideoApp> {
     width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
-        SliverFillRemainingBoxAdapter(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.only(top: 24.0),
-                child: Chewie(
-                  controller: _chewieController,
+      body: SafeArea(
+        child: CustomScrollView(scrollDirection: Axis.vertical, slivers: [
+          SliverFillRemainingBoxAdapter(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 24.0),
+                  child: Chewie(
+                    controller: _chewieController,
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                child: Text(
-                  'Video Title Here',
-                  style: TextStyle(
+                Container(
+                  margin: EdgeInsets.all(10.0),
+                  child: Text(
+                    'Video Title Here',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: 'Varela_Round',
+                        fontSize: 20.0,
+                        letterSpacing: 1.0,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Container(
+                  margin:
+                      EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
+                  child: Text(
+                    'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using , making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text',
+                    style: TextStyle(
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: Colors.grey[200],
+                  thickness: 16.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0),
+                  child: Text(
+                    'Next Video',
+                    style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Varela_Round',
-                      fontSize: 20.0,
+                      fontSize: 18.0,
                       letterSpacing: 1.0,
-                      fontWeight: FontWeight.w700),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 10.0, left: 10.0, bottom: 10.0),
-                child: Text(
-                  'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using , making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text',
-                  style: TextStyle(
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-              Divider(
-                color: Colors.grey[200],
-                thickness: 16.0,
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0),
-                child: Text(
-                  'Next Video',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Varela_Round',
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
-                  ),
-                ),
-              ),
-              Card(
-                color: Colors.indigo[50],
-                margin: EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: width,
-                      height: 200.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Image.asset("assets/images/video1.png"),
-                      ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Video Title Here',
-                        style: TextStyle(
-                          fontFamily: 'Varela_Round',
-                          fontSize: 16.0,
+                  ),
+                ),
+                Card(
+                  color: Colors.indigo[50],
+                  margin: EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: width,
+                        height: 200.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image.asset("assets/images/video1.png"),
                         ),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              Divider(
-                color: Colors.grey[200],
-                thickness: 16.0,
-              ),
-              Container(
-                margin: EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0),
-                child: Text(
-                  'More Videos',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Varela_Round',
-                    fontSize: 18.0,
-                    letterSpacing: 1.0,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Video Title Here',
+                          style: TextStyle(
+                            fontFamily: 'Varela_Round',
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ),
-            ],
+                Divider(
+                  color: Colors.grey[200],
+                  thickness: 16.0,
+                ),
+                Container(
+                  margin: EdgeInsets.only(right: 10.0, left: 10.0, top: 10.0),
+                  child: Text(
+                    'More Videos',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontFamily: 'Varela_Round',
+                      fontSize: 18.0,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate((context, index) {
-            return InkWell(
-              child: Card(
-                color: Colors.indigo[50],
-                margin: EdgeInsets.all(10.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 200,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Image.asset("assets/images/video1.png"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Video Title Here',
-                        style: TextStyle(
-                          fontFamily: 'Varela_Round',
-                          fontSize: 20.0,
+          SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return InkWell(
+                child: Card(
+                  color: Colors.indigo[50],
+                  margin: EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Image.asset("assets/images/video1.png"),
                         ),
                       ),
-                    )
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Video Title Here',
+                          style: TextStyle(
+                            fontFamily: 'Varela_Round',
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }, childCount: 10),
-        )
-      ]),
+              );
+            }, childCount: 10),
+          )
+        ]),
+      ),
     );
   }
 

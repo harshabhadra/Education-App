@@ -17,7 +17,7 @@ class BlocProvider<T extends Bloc> extends StatefulWidget {
   }
 
   // 3
-  static Type _providerType<T>() => T;
+  // static Type _providerType<T>() => T;
 
   @override
   State createState() => _BlocProviderState();

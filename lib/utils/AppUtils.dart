@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:education_app/Model/books_model.dart';
-import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/database/DatabaseChapter.dart';
 
 class AppUtils {

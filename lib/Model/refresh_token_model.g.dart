@@ -1,26 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'LoginResponse.dart';
+part of 'refresh_token_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) {
-  return LoginResponse(
-    detailPresent: json['detailPresent'] as bool,
-    message: json['message'] as String,
-    statusCode: json['statusCode'] as int,
+RefreshTokenResponse _$RefreshTokenResponseFromJson(Map<String, dynamic> json) {
+  return RefreshTokenResponse(
     customToken: json['customToken'] as String,
+    message: json['message'] as String,
     refreshToken: json['refreshToken'] as String,
+    statusCode: json['statusCode'] as int,
   );
 }
 
-Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
+Map<String, dynamic> _$RefreshTokenResponseToJson(
+        RefreshTokenResponse instance) =>
     <String, dynamic>{
-      'detailPresent': instance.detailPresent,
-      'message': instance.message,
-      'statusCode': instance.statusCode,
       'customToken': instance.customToken,
+      'message': instance.message,
       'refreshToken': instance.refreshToken,
+      'statusCode': instance.statusCode,
     };

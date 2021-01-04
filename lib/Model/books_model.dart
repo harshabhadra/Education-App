@@ -1,4 +1,3 @@
-import 'package:education_app/database/DatabaseBook.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'books_model.g.dart';
 

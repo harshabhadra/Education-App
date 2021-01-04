@@ -41,19 +41,24 @@ class _VideoPlayUiState extends State<VideoPlayUi> {
                 ),
                 preferredSize: Size(0.0, 0.0),
               ),
-        body: Column(
-          children: [
-            VimeoPlayer(
-              id: id,
-              autoPlay: true,
-            ),
-            Text(widget.video.title, style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Varela_Round',
-                      fontSize: 20.0,
-                      letterSpacing: 1.0,
-                      fontWeight: FontWeight.w700),)
-          ],
+        body: SafeArea(
+          child: Column(
+            children: [
+              VimeoPlayer(
+                id: id,
+                autoPlay: true,
+              ),
+              Text(
+                widget.video.title,
+                style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Varela_Round',
+                    fontSize: 20.0,
+                    letterSpacing: 1.0,
+                    fontWeight: FontWeight.w700),
+              )
+            ],
+          ),
         ));
   }
 }

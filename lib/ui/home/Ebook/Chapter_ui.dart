@@ -22,11 +22,13 @@ class _ChapterUiState extends State<ChapterUi> {
 
   @override
   Widget build(BuildContext context) {
-    return PDFViewerScaffold(
-      path: widget.url,
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        title: Text(widget.title),
+    return SafeArea(
+      child: PDFViewerScaffold(
+        path: widget.url,
+        appBar: AppBar(
+          backgroundColor: kPrimaryColor,
+          title: Text(widget.title),
+        ),
       ),
     );
   }

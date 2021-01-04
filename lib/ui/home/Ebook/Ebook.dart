@@ -33,71 +33,73 @@ class _EbookState extends State<Ebook> {
         elevation: 0,
       ),
       backgroundColor: Colors.white,
-      body: BlocProvider(
-        bloc: bloc,
-        child: SingleChildScrollView(
-          physics: ClampingScrollPhysics(),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(45),
-                  bottomRight: Radius.circular(45),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      tileMode: TileMode.repeated,
-                      colors: [kPrimaryColor, Colors.deepPurpleAccent],
-                    ),
+      body: SafeArea(
+        child: BlocProvider(
+          bloc: bloc,
+          child: SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(45),
+                    bottomRight: Radius.circular(45),
                   ),
-                  width: double.infinity,
-                  height: 180,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 0, 24),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'EBooks',
-                            style: TextStyle(
-                                fontFamily: 'Varela_Round',
-                                fontSize: 48,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'Today a reader, tomorrow a leader',
-                            style: TextStyle(
-                                fontFamily: 'Varela_Round',
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        tileMode: TileMode.repeated,
+                        colors: [kPrimaryColor, Colors.deepPurpleAccent],
+                      ),
+                    ),
+                    width: double.infinity,
+                    height: 180,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 24),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'EBooks',
+                              style: TextStyle(
+                                  fontFamily: 'Varela_Round',
+                                  fontSize: 48,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              'Today a reader, tomorrow a leader',
+                              style: TextStyle(
+                                  fontFamily: 'Varela_Round',
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(16),
-                child: Text('All Books',
-                    style: TextStyle(
-                        fontFamily: 'Varela_Round',
-                        fontSize: 24,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold)),
-              ),
-              _buildEbooks(bloc, context)
-            ],
+                Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text('All Books',
+                      style: TextStyle(
+                          fontFamily: 'Varela_Round',
+                          fontSize: 24,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold)),
+                ),
+                _buildEbookPage(context, bloc)
+              ],
+            ),
           ),
         ),
       ),
@@ -105,7 +107,7 @@ class _EbookState extends State<Ebook> {
   }
 }
 
-Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
+Widget _buildEbookPage(BuildContext context, BooksCacheBloc bloc) {
   return StreamBuilder(
       stream: bloc.booksStream,
       builder: (context, snapshot) {
@@ -115,7 +117,41 @@ Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
           } else if (snapshot.hasData) {
             List<DatabaseBook> bookList = snapshot.data;
             print('book list size in ui: ${bookList.length}');
-            return _buildBookList(bookList, context);
+            return Container(
+              child: DefaultTabController(
+                length: 2,
+                initialIndex: 0,
+                child: Column(
+                  children: [
+                    TabBar(
+                      labelColor: Colors.black,
+                      tabs: [
+                        Tab(
+                          text: 'Demo',
+                        ),
+                        Tab(
+                          text: 'Premium',
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: MediaQuery.of(context)
+                          .size
+                          .height, //height of TabBarView
+                      decoration: BoxDecoration(
+                          border: Border(
+                              top: BorderSide(color: Colors.grey, width: 0.5))),
+                      child: TabBarView(
+                        children: [
+                          _buildBookList(bookList, context),
+                          _buildBookList(bookList, context),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
           } else {
             return Center(
               child: Text('snap shot has no data'),
@@ -132,6 +168,34 @@ Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
         }
       });
 }
+
+// Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
+//   return StreamBuilder(
+//       stream: bloc.booksStream,
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.active) {
+//           if (snapshot.hasError) {
+//             return Text(snapshot.error.toString());
+//           } else if (snapshot.hasData) {
+//             List<DatabaseBook> bookList = snapshot.data;
+//             print('book list size in ui: ${bookList.length}');
+//             return _buildBookList(bookList, context);
+//           } else {
+//             return Center(
+//               child: Text('snap shot has no data'),
+//             );
+//           }
+//         } else {
+//           print(
+//               'Snapshot connection state: ${snapshot.connectionState.toString()}');
+//           return Center(
+//             child: Container(
+//               child: CircularProgressIndicator(),
+//             ),
+//           );
+//         }
+//       });
+// }
 
 Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
   bool isChapter = false;

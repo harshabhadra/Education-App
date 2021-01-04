@@ -49,6 +49,7 @@ dependencies:
   vimeoplayer: ^0.1.8
   expandable: ^4.1.4
   flutter_staggered_animations: "^0.1.2"
+  flutter_countdown_timer: ^1.4.0
 
 dev_dependencies:
   flutter_test:

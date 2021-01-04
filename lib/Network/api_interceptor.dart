@@ -8,10 +8,12 @@ class ApiInterceptor extends InterceptorsWrapper {
   Future onRequest(RequestOptions options) async {
     if (!(options.path == '/signup') ||
         !(options.path == '/login') ||
-        (options.path == '/studentInfo')) {
+        (options.path == '/studentInfo') ||
+        (options.path == '/refreshToken')) {
       var credBox = Hive.box('cred');
       String email = credBox.get('email');
       String token = credBox.get('token');
+
       options.headers["email"] = email;
       options.headers["Token"] = token;
     }
@@ -24,7 +26,7 @@ class ApiInterceptor extends InterceptorsWrapper {
     print("response data: " + response.data.toString());
     print("response status message : " + response.statusMessage);
     print("respon status code: " + response.statusCode.toString());
-   
+
     return response;
   }
 
@@ -35,9 +37,7 @@ class ApiInterceptor extends InterceptorsWrapper {
     print("Error message: " + error.message);
 
     var errorModel = ErrorModel(
-        title: "",
-        errorType: ErrorType.Unknown,
-        description: error.message);
-    return error;
+        title: "", errorType: ErrorType.Unknown, description: error.message);
+    return errorModel;
   }
 }

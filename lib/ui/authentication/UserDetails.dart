@@ -68,208 +68,210 @@ class _UserDetailsState extends State<UserDetails> {
 
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      body: ListView(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 15, left: 20),
-            child: Text(
-              'Students Details',
-              textScaleFactor: 1.6,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontFamily: "Varela_Round",
-                  letterSpacing: 1.6,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 17,
+      body: SafeArea(
+        child: ListView(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 15, left: 20),
+              child: Text(
+                'Students Details',
+                textScaleFactor: 1.6,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontFamily: "Varela_Round",
+                    letterSpacing: 1.6,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    color: Colors.white),
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.1,
+            ),
+            Container(
+              //color: Colors.white,
+
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height * 1.2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 65, right: 40, left: 40),
+                    child: TextField(
+                      onChanged: (val) {
+                        name = val;
+                      },
+                      decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: kPrimaryColor)),
+
+                          //hintText: 'Tell us about yourself',
+                          //helperText: 'Keep it short, this is just a demo.',
+                          fillColor: kPrimaryLightColor,
+                          filled: true,
+                          labelText: 'Name',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          prefixText: ' ',
+                          suffixStyle: const TextStyle(color: kPrimaryColor)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, right: 40, left: 40),
+                    child: TextField(
+                      onChanged: (val) {
+                        contactNumber = val;
+                      },
+                      decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderSide: new BorderSide(color: kPrimaryColor)),
+                          fillColor: kPrimaryLightColor,
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          labelText: 'Phone Number',
+                          prefixIcon: const Icon(
+                            Icons.phone,
+                            color: kPrimaryColor,
+                          ),
+                          prefixText: ' ',
+                          // suffixText: 'USD',
+                          suffixStyle: const TextStyle(color: kPrimaryColor)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, left: 40, right: 40),
+                    child: Container(
+                      width: 350,
+                      height: 60,
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.0),
+                          color: kPrimaryLightColor,
+                          border: Border.all()),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                            value: _selectedItem,
+                            items: _dropdownMenuItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedItem = value;
+                              });
+                            }),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, right: 40, left: 40),
+                    child: TextField(
+                      onChanged: (val) {
+                        address = val;
+                      },
+                      decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderSide:
+                                  new BorderSide(color: Color(0xFFF50057))),
+                          fillColor: kPrimaryLightColor,
+                          labelText: 'City',
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          prefixText: ' ',
+                          suffixStyle: const TextStyle(color: kPrimaryColor)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, right: 40, left: 40),
+                    child: TextField(
+                      onChanged: (val) {
+                        country = val;
+                      },
+                      decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderSide:
+                                  new BorderSide(color: Color(0xFFF50057))),
+                          fillColor: kPrimaryLightColor,
+                          labelText: 'COUNTRY',
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          prefixText: ' ',
+                          suffixStyle: const TextStyle(color: kPrimaryColor)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, left: 40, right: 40),
+                    child: Container(
+                      width: 350,
+                      height: 60,
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25.0),
+                          color: kPrimaryLightColor,
+                          border: Border.all()),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                            value: _selectedItem1,
+                            items: _dropdownMenuItems1,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedItem1 = value;
+                                print(_selectedItem1);
+                              });
+                            }),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 25, right: 40, left: 40),
+                    child: TextField(
+                      onChanged: (val) {
+                        dob = val;
+                      },
+                      decoration: new InputDecoration(
+                          border: new OutlineInputBorder(
+                              borderSide:
+                                  new BorderSide(color: Color(0xFFF50057))),
+                          fillColor: kPrimaryLightColor,
+                          labelText: 'Date of Birth',
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kPrimaryColor),
+                            borderRadius: BorderRadius.circular(25.7),
+                          ),
+                          prefixText: ' ',
+                          suffixStyle: const TextStyle(color: kPrimaryColor)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 25,
+                    ),
+                    child: RoundedButton(
+                      text: "PROCEED",
+                      press: () {},
+                    ),
+                  )
+                ],
+              ),
+
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(55.0),
+                  ),
                   color: Colors.white),
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.1,
-          ),
-          Container(
-            //color: Colors.white,
-
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 1.2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 65, right: 40, left: 40),
-                  child: TextField(
-                    onChanged: (val) {
-                      name = val;
-                    },
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: kPrimaryColor)),
-
-                        //hintText: 'Tell us about yourself',
-                        //helperText: 'Keep it short, this is just a demo.',
-                        fillColor: kPrimaryLightColor,
-                        filled: true,
-                        labelText: 'Name',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimaryColor),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        prefixText: ' ',
-                        suffixStyle: const TextStyle(color: kPrimaryColor)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, right: 40, left: 40),
-                  child: TextField(
-                    onChanged: (val) {
-                      contactNumber = val;
-                    },
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide: new BorderSide(color: kPrimaryColor)),
-                        fillColor: kPrimaryLightColor,
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimaryColor),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        labelText: 'Phone Number',
-                        prefixIcon: const Icon(
-                          Icons.phone,
-                          color: kPrimaryColor,
-                        ),
-                        prefixText: ' ',
-                        // suffixText: 'USD',
-                        suffixStyle: const TextStyle(color: kPrimaryColor)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, left: 40, right: 40),
-                  child: Container(
-                    width: 350,
-                    height: 60,
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.0),
-                        color: kPrimaryLightColor,
-                        border: Border.all()),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                          value: _selectedItem,
-                          items: _dropdownMenuItems,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedItem = value;
-                            });
-                          }),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, right: 40, left: 40),
-                  child: TextField(
-                    onChanged: (val) {
-                      address = val;
-                    },
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide:
-                                new BorderSide(color: Color(0xFFF50057))),
-                        fillColor: kPrimaryLightColor,
-                        labelText: 'City',
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimaryColor),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        prefixText: ' ',
-                        suffixStyle: const TextStyle(color: kPrimaryColor)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, right: 40, left: 40),
-                  child: TextField(
-                    onChanged: (val) {
-                      country = val;
-                    },
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide:
-                                new BorderSide(color: Color(0xFFF50057))),
-                        fillColor: kPrimaryLightColor,
-                        labelText: 'COUNTRY',
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimaryColor),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        prefixText: ' ',
-                        suffixStyle: const TextStyle(color: kPrimaryColor)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, left: 40, right: 40),
-                  child: Container(
-                    width: 350,
-                    height: 60,
-                    padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.0),
-                        color: kPrimaryLightColor,
-                        border: Border.all()),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                          value: _selectedItem1,
-                          items: _dropdownMenuItems1,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedItem1 = value;
-                              print(_selectedItem1);
-                            });
-                          }),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 25, right: 40, left: 40),
-                  child: TextField(
-                    onChanged: (val) {
-                      dob = val;
-                    },
-                    decoration: new InputDecoration(
-                        border: new OutlineInputBorder(
-                            borderSide:
-                                new BorderSide(color: Color(0xFFF50057))),
-                        fillColor: kPrimaryLightColor,
-                        labelText: 'Date of Birth',
-                        filled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: kPrimaryColor),
-                          borderRadius: BorderRadius.circular(25.7),
-                        ),
-                        prefixText: ' ',
-                        suffixStyle: const TextStyle(color: kPrimaryColor)),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 25,
-                  ),
-                  child: RoundedButton(
-                    text: "PROCEED",
-                    press: () {},
-                  ),
-                )
-              ],
-            ),
-
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(55.0),
-                ),
-                color: Colors.white),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
