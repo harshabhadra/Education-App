@@ -28,15 +28,15 @@ BookList _$BookListFromJson(Map<String, dynamic> json) {
     bookName: json['bookName'] as String,
     author: json['author'] as String,
     bookID: json['bookID'] as int,
-    demoBookLink: json['demoBookLink'] as String,
     description: json['description'] as String,
     listOfChapter: (json['listOfChapter'] as List)
         ?.map((e) => e == null
             ? null
             : ListOfChapter.fromJson(e as Map<String, dynamic>))
         ?.toList(),
-    offer: (json['offer'] as num)?.toDouble(),
-    price: (json['price'] as num)?.toDouble(),
+    offer: json['offer'] as String,
+    price: json['price'] as String,
+    purchaseType: json['purchaseType'] as String,
   );
 }
 
@@ -44,11 +44,11 @@ Map<String, dynamic> _$BookListToJson(BookList instance) => <String, dynamic>{
       'bookName': instance.bookName,
       'author': instance.author,
       'bookID': instance.bookID,
-      'demoBookLink': instance.demoBookLink,
       'description': instance.description,
       'listOfChapter': instance.listOfChapter,
       'offer': instance.offer,
       'price': instance.price,
+      'purchaseType': instance.purchaseType,
     };
 
 ListOfChapter _$ListOfChapterFromJson(Map<String, dynamic> json) {

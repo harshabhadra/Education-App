@@ -7,6 +7,7 @@ import 'package:education_app/Network/SignUp.dart';
 import 'package:education_app/Network/api_interceptor.dart';
 import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/studentinfo.dart';
+import 'package:education_app/Network/submit_test_request.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'ApiClient.g.dart';
@@ -25,11 +26,11 @@ abstract class ApiClient {
   @POST("/login")
   Future<HttpResponse<String>> loginUser(@Body() Login login);
 
-  @GET("/getAllVideo")
-  Future<Videos> getVideos();
+  @POST("/getAllVideo")
+  Future<HttpResponse<String>> getVideos(@Body() String videoRequest);
 
-  @GET("/getBookInfo")
-  Future<Books> getBooks();
+  @POST("/getBookInfo")
+  Future<Books> getBooks(@Body() String bookRequest);
 
   @POST("/studentInfo")
   Future<StudentInfoResponse> setStudentInfo(@Body() StudentInfo studentInfo);
@@ -41,8 +42,13 @@ abstract class ApiClient {
   Future<HttpResponse<String>> refreshToken(@Body() String refreshTokenRequest);
 
   @POST("/getStudentInfo")
-  Future<HttpResponse<String>>getStudentProfile(@Body()String profileRequest);
+  Future<HttpResponse<String>> getStudentProfile(@Body() String profileRequest);
 
   @POST("/getAllQuestionByExam")
-  Future<HttpResponse<String>>getQuestions(@Body() QuestionsRequest questionRequest);
+  Future<HttpResponse<String>> getQuestions(
+      @Body() QuestionsRequest questionRequest);
+
+  @POST("/storeResponse")
+  Future<HttpResponse<String>> submitTestResults(
+      @Body() SubmitTestRequest submitTestRequest);
 }

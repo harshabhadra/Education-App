@@ -44,7 +44,7 @@ class QuestioListExamWise {
   String _questionDescription;
   int _questionId;
   String _questionImage;
-  double _questionMark;
+  int _questionMark;
   List<String> _questionOptions;
 
   QuestioListExamWise(
@@ -53,7 +53,7 @@ class QuestioListExamWise {
       String questionDescription,
       int questionId,
       String questionImage,
-      double questionMark,
+      int questionMark,
       List<String> questionOptions}) {
     this._examId = examId;
     this._questionAnswer = questionAnswer;
@@ -75,8 +75,8 @@ class QuestioListExamWise {
   set questionId(int questionId) => _questionId = questionId;
   String get questionImage => _questionImage;
   set questionImage(String questionImage) => _questionImage = questionImage;
-  double get questionMark => _questionMark;
-  set questionMark(double questionMark) => _questionMark = questionMark;
+  int get questionMark => _questionMark;
+  set questionMark(int questionMark) => _questionMark = questionMark;
   List<String> get questionOptions => _questionOptions;
   set questionOptions(List<String> questionOptions) =>
       _questionOptions = questionOptions;

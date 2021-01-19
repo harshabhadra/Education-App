@@ -41,6 +41,7 @@ VideoList _$VideoListFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     url: json['url'] as String,
     videoCode: json['videoCode'] as int,
+    purchaseType: json['purchaseType'] as String,
   );
 }
 
@@ -49,4 +50,5 @@ Map<String, dynamic> _$VideoListToJson(VideoList instance) => <String, dynamic>{
       'title': instance.title,
       'url': instance.url,
       'videoCode': instance.videoCode,
+      'purchaseType': instance.purchaseType,
     };

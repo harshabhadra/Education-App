@@ -11,25 +11,23 @@ class DatabaseBook {
   @HiveField(2)
   int bookID;
   @HiveField(3)
-  String demoBookLink;
-  @HiveField(4)
   String description;
-  @HiveField(5)
+  @HiveField(4)
   List<DbChapter> listOfChapter;
+  @HiveField(5)
+  String offer;
   @HiveField(6)
-  double offer;
+  String price;
   @HiveField(7)
-  double price;
+  String purchaseType;
   DatabaseBook({
     this.bookName,
     this.author,
     this.bookID,
-    this.demoBookLink,
     this.description,
     this.listOfChapter,
     this.offer,
     this.price,
+    this.purchaseType
   });
 }
-
-

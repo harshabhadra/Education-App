@@ -72,7 +72,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VideoPage()));
+                                        builder: (context) => VideoPage(
+                                              examType: widget.examType,
+                                            )));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -127,7 +129,9 @@ class _CategoryPageState extends State<CategoryPage> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Ebook()));
+                                        builder: (context) => Ebook(
+                                              examType: widget.examType,
+                                            )));
                               },
                               child: Container(
                                 margin: EdgeInsets.only(

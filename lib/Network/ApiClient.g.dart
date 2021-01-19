@@ -57,31 +57,34 @@ class _ApiClient implements ApiClient {
   }
 
   @override
-  Future<Videos> getVideos() async {
+  Future<HttpResponse<String>> getVideos(videoRequest) async {
+    ArgumentError.checkNotNull(videoRequest, 'videoRequest');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _data = <String, dynamic>{};
-    final _result = await _dio.request<Map<String, dynamic>>('/getAllVideo',
+    final _data = videoRequest;
+    final _result = await _dio.request<String>('/getAllVideo',
         queryParameters: queryParameters,
         options: RequestOptions(
-            method: 'GET',
+            method: 'POST',
             headers: <String, dynamic>{},
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = Videos.fromJson(_result.data);
-    return value;
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
   }
 
   @override
-  Future<Books> getBooks() async {
+  Future<Books> getBooks(bookRequest) async {
+    ArgumentError.checkNotNull(bookRequest, 'bookRequest');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
-    final _data = <String, dynamic>{};
+    final _data = bookRequest;
     final _result = await _dio.request<Map<String, dynamic>>('/getBookInfo',
         queryParameters: queryParameters,
         options: RequestOptions(
-            method: 'GET',
+            method: 'POST',
             headers: <String, dynamic>{},
             extra: _extra,
             baseUrl: baseUrl),
@@ -175,6 +178,27 @@ class _ApiClient implements ApiClient {
     _data.addAll(questionRequest?.toJson() ?? <String, dynamic>{});
     _data.removeWhere((k, v) => v == null);
     final _result = await _dio.request<String>('/getAllQuestionByExam',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<HttpResponse<String>> submitTestResults(submitTestRequest) async {
+    ArgumentError.checkNotNull(submitTestRequest, 'submitTestRequest');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(submitTestRequest?.toJson() ?? <String, dynamic>{});
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request<String>('/storeResponse',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'POST',

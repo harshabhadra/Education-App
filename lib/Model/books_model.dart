@@ -36,27 +36,26 @@ class BookList {
   String bookName;
   String author;
   int bookID;
-  String demoBookLink;
   String description;
   List<ListOfChapter> listOfChapter;
-  double offer;
-  double price;
+  String offer;
+  String price;
+  String purchaseType;
 
   BookList(
       {this.bookName,
       this.author,
       this.bookID,
-      this.demoBookLink,
       this.description,
       this.listOfChapter,
       this.offer,
-      this.price});
+      this.price,
+      this.purchaseType});
 
   BookList.fromJson(Map<String, dynamic> json) {
     bookName = json['BookName'];
     author = json['author'];
     bookID = json['bookID'];
-    demoBookLink = json['demoBookLink'];
     description = json['description'];
     if (json['listOfChapter'] != null) {
       listOfChapter = new List<ListOfChapter>();
@@ -66,6 +65,7 @@ class BookList {
     }
     offer = json['offer'];
     price = json['price'];
+    purchaseType = json['purchaseType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,7 +73,6 @@ class BookList {
     data['BookName'] = this.bookName;
     data['author'] = this.author;
     data['bookID'] = this.bookID;
-    data['demoBookLink'] = this.demoBookLink;
     data['description'] = this.description;
     if (this.listOfChapter != null) {
       data['listOfChapter'] =
@@ -81,6 +80,7 @@ class BookList {
     }
     data['offer'] = this.offer;
     data['price'] = this.price;
+    data['purchaseType'] = this.purchaseType;
     return data;
   }
 }

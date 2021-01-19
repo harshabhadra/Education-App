@@ -1,11 +1,12 @@
-import 'package:education_app/database/DatabaseVideo.dart';
+
+import 'package:education_app/Model/Video.dart';
 import 'package:sliver_fill_remaining_box_adapter/sliver_fill_remaining_box_adapter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 
 class VideoApp extends StatefulWidget {
-  final DatabaseVideoList video;
+  final VideoList video;
 
   const VideoApp({Key key, @required this.video}) : super(key: key);
   @override

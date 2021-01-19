@@ -57,14 +57,17 @@ class VideoList {
   String title;
   String url;
   int videoCode;
+  String purchaseType;
 
-  VideoList({this.catagory, this.title, this.url, this.videoCode});
+  VideoList(
+      {this.catagory, this.title, this.url, this.videoCode, this.purchaseType});
 
   VideoList.fromJson(Map<String, dynamic> json) {
     catagory = json['catagory'];
     title = json['title'];
     url = json['url'];
     videoCode = json['videoCode'];
+    purchaseType = json['purchaseType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +76,7 @@ class VideoList {
     data['title'] = this.title;
     data['url'] = this.url;
     data['videoCode'] = this.videoCode;
+    data['purchaseType'] = this.purchaseType;
     return data;
   }
 }

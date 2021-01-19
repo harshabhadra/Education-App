@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:dio/dio.dart';
-import 'package:hive/hive.dart';
-
+import 'package:education_app/Network/video_request.dart';
 import 'package:education_app/Bloc/Bloc.dart';
 import 'package:education_app/Network/ApiClient.dart';
 import 'package:education_app/database/DatabaseBook.dart';
@@ -13,22 +11,13 @@ class BooksCacheBloc implements Bloc {
 
   Stream<List<DatabaseBook>> get booksStream => controller.stream;
 
-  void getBooks() async {
+  void getBooks(String examType) async {
     var dbBookList = <DatabaseBook>{};
-    var box = Hive.box('books');
-    if (box.isNotEmpty) {
-      print('Book box lenght: ${box.length}');
-      for (int i = 0; i < box.length; i++) {
-        dbBookList.add(box.getAt(i));
-      }
-      print('dbBooklist lenght: ${dbBookList.length}');
-      controller.sink.add(dbBookList.toList());
-    } else {
-      print('book box is empty');
       Dio dio = Dio();
       ApiClient apiClient = ApiClient(dio);
+      ItemRequest _bookRequest = ItemRequest(examType: examType);
       try {
-        var response = await apiClient.getBooks();
+        var response = await apiClient.getBooks(_bookRequest.toJson());
         print('Book  request response: ' + response.toJson().toString());
         var books = response.bookList;
         for (var book in books) {
@@ -36,24 +25,29 @@ class BooksCacheBloc implements Bloc {
               bookName: book.bookName,
               author: book.author,
               bookID: book.bookID,
-              demoBookLink: book.demoBookLink,
               description: book.description,
               listOfChapter:
                   AppUtils().getConvertedChapters(book.listOfChapter),
               offer: book.offer,
-              price: book.price);
+              price: book.price,
+              purchaseType: book.purchaseType);
 
-          if (!dbBookList.contains(dbBook)) {
             dbBookList.add(dbBook);
-            box.add(dbBook);
-          }
+
         }
         controller.sink.add(dbBookList.toList());
       } catch (error) {
         print("Error fetching books: $error");
       }
-    }
-    // controller.sink.add(dbBookList.toList());
+  }
+
+  List<DatabaseBook> getBooksByType(
+      String purchaseType, List<DatabaseBook> bookList) {
+    List<DatabaseBook> _list = List();
+    _list = bookList
+        .where((element) => element.purchaseType == purchaseType)
+        .toList();
+    return _list;
   }
 
   @override

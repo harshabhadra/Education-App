@@ -25,10 +25,7 @@ class _ChapterUiState extends State<ChapterUi> {
     return SafeArea(
       child: PDFViewerScaffold(
         path: widget.url,
-        appBar: AppBar(
-          backgroundColor: kPrimaryColor,
-          title: Text(widget.title),
-        ),
+      
       ),
     );
   }

@@ -20,11 +20,11 @@ class DatabaseBookAdapter extends TypeAdapter<DatabaseBook> {
       bookName: fields[0] as String,
       author: fields[1] as String,
       bookID: fields[2] as int,
-      demoBookLink: fields[3] as String,
-      description: fields[4] as String,
-      listOfChapter: (fields[5] as List)?.cast<DbChapter>(),
-      offer: fields[6] as double,
-      price: fields[7] as double,
+      description: fields[3] as String,
+      listOfChapter: (fields[4] as List)?.cast<DbChapter>(),
+      offer: fields[5] as String,
+      price: fields[6] as String,
+      purchaseType: fields[7] as String,
     );
   }
 
@@ -39,15 +39,15 @@ class DatabaseBookAdapter extends TypeAdapter<DatabaseBook> {
       ..writeByte(2)
       ..write(obj.bookID)
       ..writeByte(3)
-      ..write(obj.demoBookLink)
-      ..writeByte(4)
       ..write(obj.description)
-      ..writeByte(5)
+      ..writeByte(4)
       ..write(obj.listOfChapter)
-      ..writeByte(6)
+      ..writeByte(5)
       ..write(obj.offer)
+      ..writeByte(6)
+      ..write(obj.price)
       ..writeByte(7)
-      ..write(obj.price);
+      ..write(obj.purchaseType);
   }
 
   @override

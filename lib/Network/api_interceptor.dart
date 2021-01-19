@@ -23,9 +23,9 @@ class ApiInterceptor extends InterceptorsWrapper {
   @override
   Future onResponse(Response response) async {
     // Do something with response data
-    print("response data: " + response.data.toString());
-    print("response status message : " + response.statusMessage);
-    print("respon status code: " + response.statusCode.toString());
+    // print("response data: " + response.data.toString());
+    // print("response status message : " + response.statusMessage);
+    // print("respon status code: " + response.statusCode.toString());
 
     return response;
   }

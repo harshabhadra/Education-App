@@ -1,15 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:random_color/random_color.dart';
+
 import 'package:education_app/Bloc/Repository.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Bloc/books_cache_bloc.dart';
 import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/ui/home/Ebook/EbookDetails.dart';
 import 'package:education_app/utils/constants.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:random_color/random_color.dart';
 
 class Ebook extends StatefulWidget {
-  Ebook({Key key}) : super(key: key);
+  final String examType;
+  const Ebook({
+    Key key,
+    @required this.examType,
+  }) : super(key: key);
 
   @override
   _EbookState createState() => _EbookState();
@@ -20,8 +25,8 @@ class _EbookState extends State<Ebook> {
 
   @override
   void initState() {
-    Repository().refreshBooks();
-    bloc.getBooks();
+    // Repository().refreshBooks(widget.examType);
+    bloc.getBooks(widget.examType);
     super.initState();
   }
 
@@ -116,6 +121,8 @@ Widget _buildEbookPage(BuildContext context, BooksCacheBloc bloc) {
             return Text(snapshot.error.toString());
           } else if (snapshot.hasData) {
             List<DatabaseBook> bookList = snapshot.data;
+            var demoList = bloc.getBooksByType('Demo', bookList);
+            var premiumList = bloc.getBooksByType('Premium', bookList);
             print('book list size in ui: ${bookList.length}');
             return Container(
               child: DefaultTabController(
@@ -143,8 +150,8 @@ Widget _buildEbookPage(BuildContext context, BooksCacheBloc bloc) {
                               top: BorderSide(color: Colors.grey, width: 0.5))),
                       child: TabBarView(
                         children: [
-                          _buildBookList(bookList, context),
-                          _buildBookList(bookList, context),
+                          _buildBookList(demoList, context),
+                          _buildBookList(premiumList, context),
                         ],
                       ),
                     )
@@ -168,34 +175,6 @@ Widget _buildEbookPage(BuildContext context, BooksCacheBloc bloc) {
         }
       });
 }
-
-// Widget _buildEbooks(BooksCacheBloc bloc, BuildContext context) {
-//   return StreamBuilder(
-//       stream: bloc.booksStream,
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.active) {
-//           if (snapshot.hasError) {
-//             return Text(snapshot.error.toString());
-//           } else if (snapshot.hasData) {
-//             List<DatabaseBook> bookList = snapshot.data;
-//             print('book list size in ui: ${bookList.length}');
-//             return _buildBookList(bookList, context);
-//           } else {
-//             return Center(
-//               child: Text('snap shot has no data'),
-//             );
-//           }
-//         } else {
-//           print(
-//               'Snapshot connection state: ${snapshot.connectionState.toString()}');
-//           return Center(
-//             child: Container(
-//               child: CircularProgressIndicator(),
-//             ),
-//           );
-//         }
-//       });
-// }
 
 Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
   bool isChapter = false;
@@ -256,7 +235,7 @@ Widget _buildBookList(List<DatabaseBook> books, BuildContext context) {
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     right: 8, left: 8, top: 4, bottom: 4),
-                                child: Text('PREVIEW ONLY',
+                                child: Text('COMING SOON',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontFamily: 'Varela_Round',

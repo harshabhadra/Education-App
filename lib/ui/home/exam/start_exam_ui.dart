@@ -1,4 +1,4 @@
-import 'package:education_app/ui/home/exam/exam_ui.dart';
+import 'package:education_app/ui/home/exam/online_test_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:education_app/Model/exam_info.dart';
@@ -194,7 +194,9 @@ class _StartExamScreenState extends State<StartExamScreen> {
   }
 
   void _goToExamScreen(Exam exam) {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => ExamScreen(exam: exam,)));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(
+        builder: (context) => OnlineTestScreen(
+              exam: exam,
+            )));
   }
 }

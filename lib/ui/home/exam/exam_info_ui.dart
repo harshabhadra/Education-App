@@ -5,6 +5,7 @@ import 'package:education_app/Model/exam_info.dart';
 import 'package:education_app/ui/home/exam/start_exam_ui.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:random_color/random_color.dart';
 
@@ -108,132 +109,122 @@ class _ExamInfoScreenState extends State<ExamInfoScreen> {
     ExamInfo exam = list[0];
     ErrorModel errorModel = list[1];
     RandomColor _randomColor = RandomColor();
-    List<Exam> examList = [];
+    List<Exam> examList = List();
 
     if (exam != null) {
-      var tExamList = exam.examList;
+      var examList = exam.examList;
 
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        Future ft = Future(() {});
-
-        tExamList.forEach((Exam exam) {
-          ft = ft.then((value) {
-            return Future.delayed(Duration(milliseconds: 100), () {
-              examList.add(exam);
-              listKey.currentState.insertItem(examList.length - 1,
-                  duration: Duration(seconds: 1));
-            });
-          });
-        });
-      });
-
-      return AnimatedList(
-        key: listKey,
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index, animation) {
-          return SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(-1, 0),
-              end: Offset(0, 0),
-            ).animate(CurvedAnimation(
-                parent: animation,
-                curve: Curves.easeInSine,
-                reverseCurve: Curves.easeIn)),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return StartExamScreen(exam: examList[index]);
-                }));
-              },
-              child: Card(
-                color: _randomColor.randomColor(
-                    colorBrightness: ColorBrightness.primary,
-                    colorSaturation: ColorSaturation.lowSaturation,
-                    colorHue: ColorHue.multiple(
-                        colorHues: [ColorHue.blue, ColorHue.purple])),
-                elevation: 8.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20))),
-                margin: EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: ExpandablePanel(
-                        iconColor: Colors.white,
-                        header: Text(
-                          examList[index].examCatagory,
-                          style: TextStyle(
-                              fontSize: 20.0,
-                              color: Colors.white,
-                              fontFamily: 'Varela_Round',
-                              fontWeight: FontWeight.bold),
-                        ),
-                        collapsed: Text(
-                          examList[index].examDescription,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          softWrap: true,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                        expanded: Text(
-                          examList[index].examDescription,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                      child: Text(
-                        'No. of Questions: ' +
-                            examList[index].totalNumberOfQuestion,
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Marks: " + examList[index].totalMark,
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontFamily: 'Varela_Round',
-                              color: Colors.white,
+      return AnimationLimiter(
+          child: ListView.builder(
+              physics: ScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: examList.length,
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(seconds: 1),
+                    child: SlideAnimation(
+                        verticalOffset: 50.0,
+                        child: FadeInAnimation(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (context) {
+                                return StartExamScreen(exam: examList[index]);
+                              }));
+                            },
+                            child: Card(
+                              color: _randomColor.randomColor(
+                                  colorBrightness: ColorBrightness.primary,
+                                  colorSaturation:
+                                      ColorSaturation.lowSaturation,
+                                  colorHue: ColorHue.multiple(colorHues: [
+                                    ColorHue.blue,
+                                    ColorHue.purple
+                                  ])),
+                              elevation: 8.0,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              margin: EdgeInsets.all(20.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: ExpandablePanel(
+                                      iconColor: Colors.white,
+                                      header: Text(
+                                        examList[index].examCatagory,
+                                        style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.white,
+                                            fontFamily: 'Varela_Round',
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      collapsed: Text(
+                                        examList[index].examDescription,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      expanded: Text(
+                                        examList[index].examDescription,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16.0, right: 16.0),
+                                    child: Text(
+                                      'No. of Questions: ' +
+                                          examList[index].totalNumberOfQuestion,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Marks: " + examList[index].totalMark,
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontFamily: 'Varela_Round',
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Spacer(
+                                          flex: 1,
+                                        ),
+                                        Text(
+                                            'Duration: ' +
+                                                examList[index].examDuraction,
+                                            style: TextStyle(
+                                              fontSize: 20.0,
+                                              fontFamily: 'Varela_Round',
+                                              color: Colors.white,
+                                            ))
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                          Spacer(
-                            flex: 1,
-                          ),
-                          Text('Duration: ' + examList[index].examDuraction,
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontFamily: 'Varela_Round',
-                                color: Colors.white,
-                              ))
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-        initialItemCount: 0,
-      );
+                        )));
+              }));
     } else {
       return Center(
         child: Text(errorModel.description),

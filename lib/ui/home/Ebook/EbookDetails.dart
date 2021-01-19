@@ -91,123 +91,95 @@ class _EBookDetailsState extends State<EBookDetails> {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
-                    if (enable) _launchURL(widget.ebook.demoBookLink, 'Demo');
-                    setState(() {
-                      enable = false;
-                    });
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(16),
-                    width: MediaQuery.of(context).size.width,
-                    height: 200,
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      elevation: 8,
-                      child: Column(
-                        children: [
-                          Flexible(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset('assets/images/pdf_icon.png'),
-                          )),
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.grey[200],
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Demo Version',
-                                  style: TextStyle(
-                                      fontFamily: 'Varela_Round',
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
                 GridView.count(
                   crossAxisCount: 2,
                   physics: ScrollPhysics(),
                   shrinkWrap: true,
                   children: List.generate(chapterList.length, (index) {
-                    return InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(24),
-                                    topRight: Radius.circular(24))),
-                            builder: (context) {
-                              return Container(
-                                height: 200,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                          'You need to Purchase Premium',
-                                          style: TextStyle(fontSize: 18)),
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () {
+                          if (widget.ebook.purchaseType == 'Demo') {
+                            if (enable) {
+                              setState(() {
+                                enable = false;
+                              });
+                              _launchURL(chapterList[index].pdfLink,
+                                  chapterList[index].title);
+                            }
+                          } else {
+                            showModalBottomSheet(
+                                context: context,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(24),
+                                        topRight: Radius.circular(24))),
+                                builder: (context) {
+                                  return Container(
+                                    height: 200,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                              'You need to Purchase Premium',
+                                              style: TextStyle(fontSize: 18)),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(16),
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          child: RaisedButton(
+                                            color: kPrimaryColor,
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) {
+                                                return PaymentUi();
+                                              }));
+                                            },
+                                            child: Text('Purchae Premium',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18)),
+                                          ),
+                                        )
+                                      ],
                                     ),
-                                    Container(
-                                      margin: EdgeInsets.all(16),
-                                      width: MediaQuery.of(context).size.width,
-                                      child: RaisedButton(
-                                        color: kPrimaryColor,
-                                        onPressed: () {
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) {
-                                            return PaymentUi();
-                                          }));
-                                        },
-                                        child: Text('Purchae Premium',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18)),
-                                      ),
-                                    )
-                                  ],
+                                  );
+                                });
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                              elevation: 4,
+                              child: Stack(children: [
+                                Center(
+                                  child: Flexible(
+                                      child: Container(
+                                          margin:
+                                              EdgeInsets.fromLTRB(8, 8, 8, 32),
+                                          child: Image.asset(
+                                              'assets/images/pdf_icon.png'))),
                                 ),
-                              );
-                            });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                            elevation: 4,
-                            child: Stack(children: [
-                              Center(
-                                child: Flexible(
+                                Align(
+                                    alignment: Alignment.bottomCenter,
                                     child: Container(
-                                        margin:
-                                            EdgeInsets.fromLTRB(8, 8, 8, 32),
-                                        child: Image.asset(
-                                            'assets/images/pdf_icon.png'))),
-                              ),
-                              Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Container(
-                                      margin: EdgeInsets.only(bottom: 8),
-                                      child: Text(
-                                        'Chapter ${index + 1}',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold),
-                                      ))),
-                            ])),
+                                        margin: EdgeInsets.only(bottom: 8),
+                                        child: Text(
+                                          'Chapter ${index + 1}',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold),
+                                        ))),
+                              ])),
+                        ),
                       ),
                     );
                   }),
