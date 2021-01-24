@@ -13,6 +13,8 @@ class ProfileBloc extends Bloc {
 
   Stream get profileStrem => _controller.stream;
 
+  final _logOutcontroller = StreamController<bool>();
+  Stream get logoutStream => _logOutcontroller.stream;
   void getProfile() async {
     Repository repository = Repository();
     await repository.refreshToken().whenComplete(() => getProfileData());
@@ -39,8 +41,19 @@ class ProfileBloc extends Bloc {
     }
   }
 
+  void logOutUser() {
+    var box = Hive.box('user');
+    var credBox = Hive.box('cred');
+    box.clear();
+    credBox.delete('email');
+    credBox.delete('token');
+    credBox.delete('refreshToken');
+    _logOutcontroller.sink.add(true);
+  }
+
   @override
   void dispose() {
     _controller.close();
+      _logOutcontroller.close();
   }
 }

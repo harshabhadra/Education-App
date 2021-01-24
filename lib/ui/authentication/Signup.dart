@@ -111,7 +111,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                               }
                             },
                           ),
-
                     emailExist
                         ? Center(
                             child: Padding(
@@ -144,24 +143,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                         },
                       ),
                     ),
-
-                    // OrDivider(),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.center,
-                    //     children: <Widget>[
-                    //       SocalIcon(
-                    //         iconSrc: "assets/images/facebook.svg",
-                    //         press: () {},
-                    //       ),
-                    //       SocalIcon(
-                    //         iconSrc: "assets/images/google-plus.svg",
-                    //         press: () {},
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -183,12 +164,13 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
         SignUpResponse response = event;
         print("Sign up response: ${response.message}");
         if (response.statusCode == 100) {
-          SchedulerBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) {
-              return WelcomePage();
-            }), (route) => false);
-          });
+
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return StudentInfoUi(
+              email: _email,
+              password: _password,
+            );
+          }));
         } else if (response.statusCode == 200) {
           emailExist = true;
         } else if (response.statusCode == 201) {

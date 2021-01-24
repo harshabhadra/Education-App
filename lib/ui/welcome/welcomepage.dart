@@ -1,4 +1,5 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:education_app/Network/Login.dart';
 import 'package:education_app/ui/authentication/Login.dart';
 import 'package:education_app/ui/authentication/Signup.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,13 +7,27 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 class WelcomePage extends StatefulWidget {
-  WelcomePage({Key key}) : super(key: key);
+  final String email, password;
+  WelcomePage({Key key, @required this.email, @required this.password})
+      : super(key: key);
 
   @override
   _WelcomePageState createState() => _WelcomePageState();
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (widget.email.isNotEmpty && widget.password.isNotEmpty) {
+        loginUi(context, MediaQuery.of(context).size, widget.email,
+            widget.password);
+      }
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget image_carousel = new Container(
@@ -102,7 +117,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 onPressed: () {
-                                  loginUi(context, size);
+                                  loginUi(context, size, "", "");
                                 },
                               ),
                               SizedBox(

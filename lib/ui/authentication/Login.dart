@@ -13,7 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:dio/dio.dart';
 
 bool showLoading = false;
-loginUi(BuildContext context, Size size) {
+loginUi(BuildContext context, Size size, String email, String password) {
   showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -26,14 +26,18 @@ loginUi(BuildContext context, Size size) {
       builder: (context) {
         return loginBottomSheet(
           size: size,
+          email: email,
+          password: password,
         );
       });
 }
 
 class loginBottomSheet extends StatefulWidget {
   final Size size;
+  final String email, password;
 
-  const loginBottomSheet({Key key, this.size}) : super(key: key);
+  const loginBottomSheet({Key key, this.size, this.email, this.password})
+      : super(key: key);
 
   @override
   _loginBottomSheetState createState() => _loginBottomSheetState();
@@ -47,6 +51,7 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
   Size size;
   bool showNoEmail;
   bool invalidCred;
+  final bloc = LoginBloc();
 
   @override
   void initState() {
@@ -54,12 +59,13 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
     showLoading = false;
     showNoEmail = false;
     invalidCred = false;
+    _email = widget.email;
+    _password = widget.password;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = LoginBloc();
     return BlocProvider(
       bloc: bloc,
       child: Padding(
@@ -81,13 +87,16 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
                     height: 30,
                   ),
                   RoundedInputField(
+                    text: widget.email,
                     hintText: "Your Email",
                     onChanged: (value) {
                       _email = value;
                       print(value);
                     },
+                    
                   ),
                   RoundedPasswordField(
+                    text: widget.password,
                     onChanged: (value) {
                       _password = value;
                       print(value);
@@ -154,30 +163,33 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
       showLoading = true;
       showNoEmail = false;
       invalidCred = false;
-    });
-    bloc.loginStream.listen((event) {
-      setState(() {
-        showLoading = false;
-        LoginResponse loginResponse = event;
-        print('Login Response: ${loginResponse.message}');
-        if (loginResponse.statusCode == 100) {
-          if (loginResponse.detailPresent) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) {
-                return Home(loginResponse: loginResponse);
-              }), (route) => false);
-            });
+      bloc.loginStream.listen((event) {
+        setState(() {
+          showLoading = false;
+          LoginResponse loginResponse = event;
+          print('Login Response in ui : ${loginResponse.message}');
+          if (loginResponse.statusCode == 100) {
+            if (loginResponse.detailPresent) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (context) {
+                  return Home(loginResponse: loginResponse);
+                }), (route) => false);
+              });
+            } else {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return StudentInfoUi(
+                  email: _email,
+                  password: _password,
+                );
+              }));
+            }
+          } else if (loginResponse.statusCode == 200) {
+            showNoEmail = true;
           } else {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return StudentInfoUi(loginResponse: loginResponse, email: _email,);
-            }));
+            invalidCred = true;
           }
-        } else if (loginResponse.statusCode == 200) {
-          showNoEmail = true;
-        } else {
-          invalidCred = true;
-        }
+        });
       });
     });
   }

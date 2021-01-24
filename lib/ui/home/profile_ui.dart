@@ -1,8 +1,10 @@
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Bloc/profile_bloc.dart';
 import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/ui/welcome/welcomepage.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:random_color/random_color.dart';
@@ -34,7 +36,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(16.0),
             child: IconButton(
               icon: Icon(Icons.logout),
-              onPressed: () {},
+              onPressed: () {
+                bloc.logOutUser();
+                setState(() {
+                  bloc.logoutStream.listen((event) {
+                    if (event) {
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (context) {
+                          return WelcomePage(email: "",password: "",);
+                        }), (route) => false);
+                      });
+                    }
+                  });
+                });
+              },
             ),
           )
         ],
@@ -88,8 +104,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
                           child: Center(
                             child: Text(
-                              'Course: ' +
-                                  profileResponse.studentInfo.profDetails,
+                              'Course: ',
                               style: TextStyle(
                                   fontSize: 24.0, fontWeight: FontWeight.bold),
                             ),

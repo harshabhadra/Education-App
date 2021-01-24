@@ -1,5 +1,6 @@
 import 'package:education_app/Network/studentinfo.dart';
 import 'package:education_app/ui/home/HomeScreen.dart';
+import 'package:education_app/ui/welcome/welcomepage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -18,7 +19,6 @@ String contactNumber;
 String gender;
 String address;
 String country;
-String profDetals;
 String dob;
 String email;
 
@@ -30,9 +30,8 @@ class ListItem {
 }
 
 class StudentInfoUi extends StatefulWidget {
-  final LoginResponse loginResponse;
-  final String email;
-  const StudentInfoUi({Key key, this.loginResponse, this.email})
+  final String email, password;
+  const StudentInfoUi({Key key, @required this.email, @required this.password})
       : super(key: key);
 
   @override
@@ -56,17 +55,8 @@ class _StudentInfoState extends State<StudentInfoUi> {
     //ListItem(4, "Fourth Item")
   ];
 
-  List<ListItem> _dropdownItems1 = [
-    ListItem(1, "MBBS"),
-    ListItem(2, "MS"),
-    //ListItem(4, "Fourth Item")
-  ];
-
   List<DropdownMenuItem<ListItem>> _dropdownMenuItems;
   ListItem _selectedItem;
-
-  List<DropdownMenuItem<ListItem>> _dropdownMenuItems1;
-  ListItem _selectedItem1;
 
   void initState() {
     super.initState();
@@ -74,10 +64,6 @@ class _StudentInfoState extends State<StudentInfoUi> {
     _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
     _selectedItem = _dropdownMenuItems[0].value;
     gender = _selectedItem.name;
-
-    _dropdownMenuItems1 = buildDropDownMenuItems(_dropdownItems1);
-    _selectedItem1 = _dropdownMenuItems1[0].value;
-    profDetals = _selectedItem1.name;
   }
 
   List<DropdownMenuItem<ListItem>> buildDropDownMenuItems(List listItems) {
@@ -247,30 +233,30 @@ class _StudentInfoState extends State<StudentInfoUi> {
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Container(
-                            width: 320,
-                            height: 60,
-                            padding:
-                                const EdgeInsets.only(left: 30.0, right: 20.0),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(25.0),
-                                border: Border.all()),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                  hint: Text('Exam Type'),
-                                  value: _selectedItem1,
-                                  items: _dropdownMenuItems1,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedItem1 = value;
-                                      profDetals = _selectedItem1.name;
-                                    });
-                                  }),
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(bottom: 10),
+                        //   child: Container(
+                        //     width: 320,
+                        //     height: 60,
+                        //     padding:
+                        //         const EdgeInsets.only(left: 30.0, right: 20.0),
+                        //     decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(25.0),
+                        //         border: Border.all()),
+                        //     child: DropdownButtonHideUnderline(
+                        //       child: DropdownButton(
+                        //           hint: Text('Exam Type'),
+                        //           value: _selectedItem1,
+                        //           items: _dropdownMenuItems1,
+                        //           onChanged: (value) {
+                        //             setState(() {
+                        //               _selectedItem1 = value;
+                        //               profDetals = _selectedItem1.name;
+                        //             });
+                        //           }),
+                        //     ),
+                        //   ),
+                        // ),
                         showLoading
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -284,13 +270,14 @@ class _StudentInfoState extends State<StudentInfoUi> {
                                   if (_key.currentState.validate()) {
                                     _key.currentState.save();
                                     StudentInfo studentInfo = StudentInfo(
-                                        email: widget.email,
-                                        name: name,
-                                        contactNumber: int.parse(contactNumber),
-                                        address: address,
-                                        country: country,
-                                        dob: dob,
-                                        profDetails: profDetals);
+                                      email: widget.email,
+                                      name: name,
+                                      contactNumber: int.parse(contactNumber),
+                                      address: address,
+                                      country: country,
+                                      gender: gender,
+                                      dob: dob,
+                                    );
 
                                     bloc.setStudentInfo(studentInfo);
                                     submitStudentInfo(bloc);
@@ -321,7 +308,7 @@ class _StudentInfoState extends State<StudentInfoUi> {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (context) {
-                return Home(loginResponse: widget.loginResponse);
+                return WelcomePage(email: widget.email, password: widget.password);
               }), (route) => false);
             });
           } else {

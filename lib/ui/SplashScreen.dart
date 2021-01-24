@@ -45,7 +45,7 @@ class _SplashState extends State<Splash> {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
-              return WelcomePage();
+              return WelcomePage(email: "",password: "",);
             }), (route) => false);
           });
         });

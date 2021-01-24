@@ -4,12 +4,14 @@ import 'text_field_container.dart';
 
 class RoundedInputField extends StatelessWidget {
   final String hintText;
+  final String text;
   final IconData icon;
   final ValueChanged<String> onChanged;
 
   const RoundedInputField({
     Key key,
     this.hintText,
+    this.text,
     this.icon = Icons.person,
     this.onChanged,
   }) : super(key: key);
@@ -18,6 +20,7 @@ class RoundedInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFieldContainer(
       child: TextFormField(
+        initialValue: text,
         onChanged: onChanged,
         validator: (value) {
           if (value.isEmpty) {

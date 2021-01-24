@@ -10,7 +10,6 @@ class StudentInfo {
   String country;
   String gender;
   String dob;
-  String profDetails;
 
   StudentInfo(
       {this.email,
@@ -20,7 +19,7 @@ class StudentInfo {
       this.country,
       this.gender,
       this.dob,
-      this.profDetails});
+    });
 
   StudentInfo.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -30,7 +29,6 @@ class StudentInfo {
     country = json['country'];
     gender = json['gender'];
     dob = json['dob'];
-    profDetails = json['profDetails'];
   }
 
   Map<String, dynamic> toJson() {
@@ -42,7 +40,6 @@ class StudentInfo {
     data['country'] = this.country;
     data['gender'] = this.gender;
     data['dob'] = this.dob;
-    data['profDetails'] = this.profDetails;
     return data;
   }
 }

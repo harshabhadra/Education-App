@@ -6,8 +6,8 @@ class LoginResponse {
   bool _detailPresent;
   String _message;
   int _statusCode;
-  String _customToken;
-  String _refreshToken;
+  String _customToken = "";
+  String _refreshToken = "";
 
   LoginResponse(
       {bool detailPresent,

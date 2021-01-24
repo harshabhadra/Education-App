@@ -15,7 +15,6 @@ StudentInfo _$StudentInfoFromJson(Map<String, dynamic> json) {
     country: json['country'] as String,
     gender: json['gender'] as String,
     dob: json['dob'] as String,
-    profDetails: json['profDetails'] as String,
   );
 }
 
@@ -28,5 +27,4 @@ Map<String, dynamic> _$StudentInfoToJson(StudentInfo instance) =>
       'country': instance.country,
       'gender': instance.gender,
       'dob': instance.dob,
-      'profDetails': instance.profDetails,
     };

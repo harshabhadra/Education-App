@@ -8,12 +8,11 @@ import 'package:education_app/Network/ApiClient.dart';
 import 'package:education_app/Network/Login.dart';
 import 'package:education_app/database/DatabaseLogin.dart';
 import 'package:hive/hive.dart';
-import 'package:retrofit/dio.dart';
 
 class LoginBloc implements Bloc {
-  final _controller = StreamController<LoginResponse>();
+  final _controller = StreamController<LoginResponse>.broadcast();
 
-  Stream get loginStream => _controller.stream;
+  Stream get loginStream => _controller.stream.asBroadcastStream();
 
   void login(String email, String password) async {
     Dio dio = Dio();
