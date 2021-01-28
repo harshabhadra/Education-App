@@ -1,3 +1,5 @@
+import 'package:education_app/Bloc/profile_bloc.dart';
+import 'package:education_app/Model/profile_response.dart';
 import 'package:flutter/material.dart';
 
 import 'package:education_app/ui/home/Ebook/Ebook.dart';
@@ -6,15 +8,21 @@ import 'package:education_app/ui/home/video/Video.dart';
 
 class CategoryPage extends StatefulWidget {
   final String examType;
-  const CategoryPage({
-    Key key,
-    @required this.examType,
-  }) : super(key: key);
+  final ProfileResponse profileResponse;
+  const CategoryPage(
+      {Key key, @required this.examType, @required this.profileResponse})
+      : super(key: key);
   @override
   _CategoryPageState createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  @override
+  void initState() {
+    print('profile info: ${widget.profileResponse.studentInfo.name}');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,6 +139,7 @@ class _CategoryPageState extends State<CategoryPage> {
                                     MaterialPageRoute(
                                         builder: (context) => Ebook(
                                               examType: widget.examType,
+                                              profileResponse: widget.profileResponse,
                                             )));
                               },
                               child: Container(

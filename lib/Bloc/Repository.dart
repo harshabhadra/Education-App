@@ -7,6 +7,7 @@ import 'package:education_app/Model/exam_questions_model.dart';
 import 'package:education_app/Model/refresh_token_model.dart';
 import 'package:education_app/Network/ApiClient.dart';
 import 'package:dio/dio.dart';
+import 'package:education_app/Network/purchase_book_request.dart';
 import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/refresh_token_request.dart';
 import 'package:education_app/Network/submit_test_request.dart';
@@ -164,6 +165,51 @@ class Repository {
       return body;
     } catch (error) {
       print("error submitting test results: $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+      return map;
+    }
+  }
+
+  //Get leaderboard details
+  Future<Map<String, dynamic>> getLeaderBoard(int examId) async {
+    Dio dio = Dio();
+    ApiClient _apiClient = ApiClient(dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    QuestionsRequest _questionRequest = QuestionsRequest(examId: examId);
+    try {
+      var response = await _apiClient.getLeaderBoard(_questionRequest);
+      print('Leaderboard response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      return body;
+    } catch (error) {
+      print("error submitting test results: $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+      return map;
+    }
+  }
+
+  Future<Map<String, dynamic>> addPurchase(
+      PurchaseBookRequest purchaseBookRequest) async {
+    Dio dio = Dio();
+    ApiClient _apiClient = ApiClient(dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    try {
+      var response = await _apiClient.addPurchase(purchaseBookRequest);
+      print('Purchase response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      return body;
+    } catch (error) {
+      print("error submitting purchase: $error");
       ErrorModel errorModel = ErrorModel(
           title: 'Error',
           description: error.toString(),

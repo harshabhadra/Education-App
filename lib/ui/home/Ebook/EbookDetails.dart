@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:education_app/Model/profile_response.dart';
 import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/database/DatabaseChapter.dart';
 import 'package:education_app/ui/home/Ebook/Chapter_ui.dart';
@@ -8,12 +9,15 @@ import 'package:education_app/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
 
 class EBookDetails extends StatefulWidget {
   final DatabaseBook ebook;
+  final List<PurchasedBook> pBookList;
 
-  const EBookDetails({Key key, @required this.ebook}) : super(key: key);
+  const EBookDetails({Key key, @required this.ebook, @required this.pBookList})
+      : super(key: key);
 
   @override
   _EBookDetailsState createState() => _EBookDetailsState();
@@ -21,11 +25,30 @@ class EBookDetails extends StatefulWidget {
 
 class _EBookDetailsState extends State<EBookDetails> {
   List<DbChapter> chapterList;
-  bool enable;
+  bool enable, isPurchased;
+  List<int> bookIdList = [];
   @override
   void initState() {
     chapterList = widget.ebook.listOfChapter;
     enable = true;
+    if (widget.pBookList.isNotEmpty) {
+      for (PurchasedBook book in widget.pBookList) {
+        bookIdList.add(book.bookID);
+      }
+      bookIdList.contains(widget.ebook.bookID)
+          ? isPurchased = true
+          : isPurchased = false;
+      if (bookIdList.contains(widget.ebook.bookID)) {
+        isPurchased = true;
+        print('book purchased');
+      } else {
+        isPurchased = false;
+        print('book not purchased');
+      }
+    } else {
+      isPurchased = false;
+      print('book not purchased');
+    }
     super.initState();
   }
 
@@ -109,50 +132,138 @@ class _EBookDetailsState extends State<EBookDetails> {
                                   chapterList[index].title);
                             }
                           } else {
-                            showModalBottomSheet(
-                                context: context,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(24),
-                                        topRight: Radius.circular(24))),
-                                builder: (context) {
-                                  return Container(
-                                    height: 200,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text(
-                                              'You need to Purchase Premium',
-                                              style: TextStyle(fontSize: 18)),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.all(16),
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: RaisedButton(
-                                            color: kPrimaryColor,
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) {
-                                                return PaymentUi();
-                                              }));
-                                            },
-                                            child: Text('Purchae Premium',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18)),
+                            if (isPurchased) {
+                              setState(() {
+                                enable = false;
+                              });
+                              _launchURL(chapterList[index].pdfLink,
+                                  chapterList[index].title);
+                            } else {
+                              showModalBottomSheet(
+                                  context: context,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(24),
+                                          topRight: Radius.circular(24))),
+                                  builder: (context) {
+                                    return Container(
+                                      margin: EdgeInsets.fromLTRB(8, 24, 8, 0),
+                                      child: Stack(
+                                        children: [
+                                          SingleChildScrollView(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Lottie.asset(
+                                                    'assets/raw/book.json',
+                                                    height: 120,
+                                                    fit: BoxFit.fill),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                      '${widget.ebook.bookName}',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                      'Written by : ${widget.ebook.author}',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8),
+                                                  child: Text(
+                                                      'Price : ₹${widget.ebook.price}',
+                                                      style: TextStyle(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.w600)),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 8.0,
+                                                          bottom: 16),
+                                                  child: Text(
+                                                      'Discount : ₹${widget.ebook.offer}',
+                                                      style: TextStyle(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.w500)),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
+                                          Container(
+                                            child: Align(
+                                              alignment: Alignment.topRight,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8.0,
+                                                              bottom: 8.0),
+                                                      child: Text(
+                                                          'Sub Total : ₹${int.parse(widget.ebook.price) - int.parse(widget.ebook.offer)}',
+                                                          style: TextStyle(
+                                                              fontSize: 24,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500)),
+                                                    ),
+                                                    RaisedButton(
+                                                      color: kPrimaryColor,
+                                                      onPressed: () {
+                                                        Navigator.of(context).push(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) {
+                                                          return PaymentUi(
+                                                            price: (int.parse(
+                                                                    widget.ebook
+                                                                        .price) -
+                                                                int.parse(widget
+                                                                    .ebook
+                                                                    .offer)),
+                                                            bookId: widget
+                                                                .ebook.bookID,
+                                                          );
+                                                        }));
+                                                      },
+                                                      child: Text('Buy Now',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 18)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  });
+                            }
                           }
                         },
                         child: Padding(
@@ -161,12 +272,10 @@ class _EBookDetailsState extends State<EBookDetails> {
                               elevation: 4,
                               child: Stack(children: [
                                 Center(
-                                  child: Flexible(
-                                      child: Container(
-                                          margin:
-                                              EdgeInsets.fromLTRB(8, 8, 8, 32),
-                                          child: Image.asset(
-                                              'assets/images/pdf_icon.png'))),
+                                  child: Container(
+                                      margin: EdgeInsets.fromLTRB(8, 8, 8, 32),
+                                      child: Image.asset(
+                                          'assets/images/pdf_icon.png')),
                                 ),
                                 Align(
                                     alignment: Alignment.bottomCenter,

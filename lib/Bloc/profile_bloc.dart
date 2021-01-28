@@ -9,9 +9,9 @@ import 'package:education_app/Network/profile_request.dart';
 import 'package:hive/hive.dart';
 
 class ProfileBloc extends Bloc {
-  final _controller = StreamController<ProfileResponse>();
+  final _controller = StreamController<ProfileResponse>.broadcast();
 
-  Stream get profileStrem => _controller.stream;
+  Stream<ProfileResponse> get profileStrem => _controller.stream.asBroadcastStream();
 
   final _logOutcontroller = StreamController<bool>();
   Stream get logoutStream => _logOutcontroller.stream;

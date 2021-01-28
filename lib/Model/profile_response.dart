@@ -1,6 +1,3 @@
-
-import 'package:json_annotation/json_annotation.dart';
-@JsonSerializable()
 class ProfileResponse {
   Status _status;
   StudentInfo _studentInfo;
@@ -35,7 +32,6 @@ class ProfileResponse {
   }
 }
 
-@JsonSerializable()
 class Status {
   String _message;
   int _statusCode;
@@ -63,7 +59,6 @@ class Status {
   }
 }
 
-@JsonSerializable()
 class StudentInfo {
   String _address;
   int _contactNumber;
@@ -72,7 +67,8 @@ class StudentInfo {
   String _email;
   String _gender;
   String _name;
-  String _profDetails;
+  bool _premiumUser;
+  List<PurchasedBook> _purchasedBook;
 
   StudentInfo(
       {String address,
@@ -82,7 +78,8 @@ class StudentInfo {
       String email,
       String gender,
       String name,
-      String profDetails}) {
+      bool premiumUser,
+      List<PurchasedBook> purchasedBook}) {
     this._address = address;
     this._contactNumber = contactNumber;
     this._country = country;
@@ -90,7 +87,8 @@ class StudentInfo {
     this._email = email;
     this._gender = gender;
     this._name = name;
-    this._profDetails = profDetails;
+    this._premiumUser = premiumUser;
+    this._purchasedBook = purchasedBook;
   }
 
   String get address => _address;
@@ -107,8 +105,11 @@ class StudentInfo {
   set gender(String gender) => _gender = gender;
   String get name => _name;
   set name(String name) => _name = name;
-  String get profDetails => _profDetails;
-  set profDetails(String profDetails) => _profDetails = profDetails;
+  bool get premiumUser => _premiumUser;
+  set premiumUser(bool premiumUser) => _premiumUser = premiumUser;
+  List<PurchasedBook> get purchasedBook => _purchasedBook;
+  set purchasedBook(List<PurchasedBook> purchasedBook) =>
+      _purchasedBook = purchasedBook;
 
   StudentInfo.fromJson(Map<String, dynamic> json) {
     _address = json['address'];
@@ -118,7 +119,13 @@ class StudentInfo {
     _email = json['email'];
     _gender = json['gender'];
     _name = json['name'];
-    _profDetails = json['profDetails'];
+    _premiumUser = json['premiumUser'];
+    if (json['purchasedBook'] != null) {
+      _purchasedBook = new List<PurchasedBook>();
+      json['purchasedBook'].forEach((v) {
+        _purchasedBook.add(new PurchasedBook.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -130,7 +137,138 @@ class StudentInfo {
     data['email'] = this._email;
     data['gender'] = this._gender;
     data['name'] = this._name;
-    data['profDetails'] = this._profDetails;
+    data['premiumUser'] = this._premiumUser;
+    if (this._purchasedBook != null) {
+      data['purchasedBook'] =
+          this._purchasedBook.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class PurchasedBook {
+  String _bookName;
+  String _author;
+  int _bookID;
+  String _description;
+  String _examType;
+  List<ListOfChapter> _listOfChapter;
+  String _offer;
+  String _price;
+  String _purchaseType;
+
+  PurchasedBook(
+      {String bookName,
+      String author,
+      int bookID,
+      String description,
+      String examType,
+      List<ListOfChapter> listOfChapter,
+      String offer,
+      String price,
+      String purchaseType}) {
+    this._bookName = bookName;
+    this._author = author;
+    this._bookID = bookID;
+    this._description = description;
+    this._examType = examType;
+    this._listOfChapter = listOfChapter;
+    this._offer = offer;
+    this._price = price;
+    this._purchaseType = purchaseType;
+  }
+
+  String get bookName => _bookName;
+  set bookName(String bookName) => _bookName = bookName;
+  String get author => _author;
+  set author(String author) => _author = author;
+  int get bookID => _bookID;
+  set bookID(int bookID) => _bookID = bookID;
+  String get description => _description;
+  set description(String description) => _description = description;
+  String get examType => _examType;
+  set examType(String examType) => _examType = examType;
+  List<ListOfChapter> get listOfChapter => _listOfChapter;
+  set listOfChapter(List<ListOfChapter> listOfChapter) =>
+      _listOfChapter = listOfChapter;
+  String get offer => _offer;
+  set offer(String offer) => _offer = offer;
+  String get price => _price;
+  set price(String price) => _price = price;
+  String get purchaseType => _purchaseType;
+  set purchaseType(String purchaseType) => _purchaseType = purchaseType;
+
+  PurchasedBook.fromJson(Map<String, dynamic> json) {
+    _bookName = json['BookName'];
+    _author = json['author'];
+    _bookID = json['bookID'];
+    _description = json['description'];
+    _examType = json['examType'];
+    if (json['listOfChapter'] != null) {
+      _listOfChapter = new List<ListOfChapter>();
+      json['listOfChapter'].forEach((v) {
+        _listOfChapter.add(new ListOfChapter.fromJson(v));
+      });
+    }
+    _offer = json['offer'];
+    _price = json['price'];
+    _purchaseType = json['purchaseType'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['BookName'] = this._bookName;
+    data['author'] = this._author;
+    data['bookID'] = this._bookID;
+    data['description'] = this._description;
+    data['examType'] = this._examType;
+    if (this._listOfChapter != null) {
+      data['listOfChapter'] =
+          this._listOfChapter.map((v) => v.toJson()).toList();
+    }
+    data['offer'] = this._offer;
+    data['price'] = this._price;
+    data['purchaseType'] = this._purchaseType;
+    return data;
+  }
+}
+
+class ListOfChapter {
+  String _catagory;
+  int _chapterID;
+  String _pdfLink;
+  String _title;
+
+  ListOfChapter(
+      {String catagory, int chapterID, String pdfLink, String title}) {
+    this._catagory = catagory;
+    this._chapterID = chapterID;
+    this._pdfLink = pdfLink;
+    this._title = title;
+  }
+
+  String get catagory => _catagory;
+  set catagory(String catagory) => _catagory = catagory;
+  int get chapterID => _chapterID;
+  set chapterID(int chapterID) => _chapterID = chapterID;
+  String get pdfLink => _pdfLink;
+  set pdfLink(String pdfLink) => _pdfLink = pdfLink;
+  String get title => _title;
+  set title(String title) => _title = title;
+
+  ListOfChapter.fromJson(Map<String, dynamic> json) {
+    _catagory = json['catagory'];
+    _chapterID = json['chapterID'];
+    _pdfLink = json['pdfLink'];
+    _title = json['title'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['catagory'] = this._catagory;
+    data['chapterID'] = this._chapterID;
+    data['pdfLink'] = this._pdfLink;
+    data['title'] = this._title;
     return data;
   }
 }

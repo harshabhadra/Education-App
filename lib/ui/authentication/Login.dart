@@ -1,6 +1,8 @@
 import 'package:education_app/Bloc/LoginBloc.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Model/LoginResponse.dart';
+import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/Network/profile_request.dart';
 import 'package:education_app/ui/authentication/StudentInfo.dart';
 import 'package:education_app/ui/components/already_have_an_account_acheck.dart';
 import 'package:education_app/ui/components/rounded_button.dart';
@@ -93,7 +95,6 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
                       _email = value;
                       print(value);
                     },
-                    
                   ),
                   RoundedPasswordField(
                     text: widget.password,
@@ -170,12 +171,7 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
           print('Login Response in ui : ${loginResponse.message}');
           if (loginResponse.statusCode == 100) {
             if (loginResponse.detailPresent) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil(context,
-                    MaterialPageRoute(builder: (context) {
-                  return Home(loginResponse: loginResponse);
-                }), (route) => false);
-              });
+              _getStudentInfo(loginResponse);
             } else {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return StudentInfoUi(
@@ -189,6 +185,21 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
           } else {
             invalidCred = true;
           }
+        });
+      });
+    });
+  }
+
+  void _getStudentInfo(LoginResponse loginResponse) {
+    setState(() {
+      bloc.getProfile();
+      bloc.profileStream.listen((event) {
+        ProfileResponse profileResponse = event;
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushAndRemoveUntil(context,
+              MaterialPageRoute(builder: (context) {
+            return Home(loginResponse: loginResponse, profileResponse: profileResponse,);
+          }), (route) => false);
         });
       });
     });

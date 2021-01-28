@@ -1,6 +1,6 @@
-import 'package:education_app/ui/home/exam/exam_info_ui.dart';
+import 'package:education_app/Bloc/profile_bloc.dart';
+import 'package:education_app/Model/profile_response.dart';
 import 'package:education_app/ui/home/profile_ui.dart';
-import 'package:education_app/ui/home/video/Video.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +9,10 @@ import 'package:education_app/ui/home/CategoryPage.dart';
 
 class Home extends StatefulWidget {
   final LoginResponse loginResponse;
+  final ProfileResponse profileResponse;
 
-  const Home({
-    Key key,
-    this.loginResponse,
-  }) : super(key: key);
+  const Home({Key key, this.loginResponse, this.profileResponse})
+      : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -21,28 +20,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _index = 0;
+  ProfileBloc _bloc = ProfileBloc();
+  ProfileResponse _profileResponse;
+
+  @override
+  void initState() {
+    _profileResponse = widget.profileResponse;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget child;
-    switch (_index) {
-      case 0:
-        child = CategoryPage(
-          examType: 'NEET',
-        );
-        break;
-      case 1:
-        child = CategoryPage(
-          examType: 'FMGE',
-        );
-        break;
-      // case 2:
-      //   child = ExamInfoScreen();
-      //   break;
-      case 2:
-        child = ProfileScreen();
-        break;
-    }
+  
+      switch (_index) {
+        case 0:
+          child = CategoryPage(
+            examType: 'NEET',
+            profileResponse: _profileResponse,
+          );
+          break;
+        case 1:
+          child = CategoryPage(
+            examType: 'FMGE',
+            profileResponse: _profileResponse,
+          );
+          break;
+        case 2:
+          child = ProfileScreen();
+          break;
+      }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -74,7 +81,6 @@ class _HomeState extends State<Home> {
               'assets/images/fmge.png',
               scale: 6,
             ),
-            
             title: Text('FMGE',
                 style: TextStyle(
                     letterSpacing: 0.5,
@@ -83,19 +89,13 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.w600,
                     color: Colors.black54)),
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.school),
-          //   title: Text('TEST',
-          //       style: TextStyle(
-          //           letterSpacing: 0.5,
-          //           fontFamily: 'Varela_Round',
-          //           fontSize: 15,
-          //           fontWeight: FontWeight.w600,
-          //           color: Colors.black54)),
-          // ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle, color: kPrimaryColor,),
-            title: Text('PROFIE', style: TextStyle(
+            icon: Icon(
+              Icons.account_circle,
+              color: kPrimaryColor,
+            ),
+            title: Text('PROFIE',
+                style: TextStyle(
                     letterSpacing: 0.5,
                     fontFamily: 'Varela_Round',
                     fontSize: 15,
@@ -105,5 +105,28 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  Widget _buildPage(ProfileBloc _bloc, Widget child) {
+    return StreamBuilder(
+        stream: _bloc.profileStrem,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            if (snapshot.hasData) {
+              _profileResponse = snapshot.data;
+              return SizedBox.expand(child: child);
+            } else if (snapshot.hasError) {
+              return Center(child: Text('${snapshot.error.toString()}'));
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }

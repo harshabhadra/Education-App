@@ -1,6 +1,7 @@
 import 'package:education_app/Bloc/online_test_bloc.dart';
 import 'package:education_app/Model/exam_questions_model.dart';
 import 'package:education_app/Network/submit_test_request.dart';
+import 'package:education_app/ui/home/leaderboard/leaderboard_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,8 +9,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class TestReportScreen extends StatefulWidget {
   final SubmitTestRequest submitTestRequest;
   final List<QuestioListExamWise> questionsList;
+  final int examId;
   TestReportScreen(
-      {Key key, @required this.submitTestRequest, @required this.questionsList})
+      {Key key,
+      @required this.submitTestRequest,
+      @required this.questionsList,
+      @required this.examId})
       : super(key: key);
 
   @override
@@ -34,7 +39,11 @@ class _TestReportScreenState extends State<TestReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return LeaderBoardScreen(examId: widget.examId);
+          }));
+        },
         backgroundColor: kPrimaryColor,
         child: Icon(Icons.leaderboard_outlined),
       ),
@@ -55,10 +64,11 @@ class _TestReportScreenState extends State<TestReportScreen> {
   }
 
   Widget _buildReportPage() {
-    return Container(
-      color: Colors.blue[100],
-      width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
+      child: Container(
+        color: Colors.blue[100],
+        width: MediaQuery.of(context).size.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -119,6 +129,7 @@ class _TestReportScreenState extends State<TestReportScreen> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(8, 16, 8, 16),
                         child: ListView.builder(
+                            physics: ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: widget.questionsList.length,
                             itemBuilder: (context, index) {
@@ -154,7 +165,6 @@ class _TestReportScreenState extends State<TestReportScreen> {
                                     ),
                                   ),
                                   Container(
-                                    
                                     color: (answerDetails.questionAnswer ==
                                             answerDetails.studentAnswer)
                                         ? Colors.green
@@ -171,7 +181,8 @@ class _TestReportScreenState extends State<TestReportScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0, top: 4.0),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8.0, top: 4.0),
                                     child: Divider(
                                       height: 1.0,
                                       color: Colors.grey,

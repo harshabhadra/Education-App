@@ -17,14 +17,14 @@ class _PaymentClient implements PaymentClient {
   String baseUrl;
 
   @override
-  Future<String> paySubs(paymentRequest) async {
+  Future<PayResponse> paySubs(paymentRequest) async {
     ArgumentError.checkNotNull(paymentRequest, 'paymentRequest');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(paymentRequest?.toJson() ?? <String, dynamic>{});
     _data.removeWhere((k, v) => v == null);
-    final _result = await _dio.request<String>('/orders',
+    final _result = await _dio.request<Map<String, dynamic>>('orders',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'POST',
@@ -32,7 +32,7 @@ class _PaymentClient implements PaymentClient {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = _result.data;
+    final value = PayResponse.fromJson(_result.data);
     return value;
   }
 }

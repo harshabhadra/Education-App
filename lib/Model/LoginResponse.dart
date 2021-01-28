@@ -1,12 +1,19 @@
+import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'LoginResponse.g.dart';
 
 @JsonSerializable()
+@HiveType(typeId: 4)
 class LoginResponse {
+  @HiveField(0)
   bool _detailPresent;
+  @HiveField(1)
   String _message;
+  @HiveField(2)
   int _statusCode;
+  @HiveField(3)
   String _customToken = "";
+  @HiveField(4)
   String _refreshToken = "";
 
   LoginResponse(

@@ -5,6 +5,7 @@ import 'package:education_app/Model/student_info_response.dart';
 import 'package:education_app/Network/Login.dart';
 import 'package:education_app/Network/SignUp.dart';
 import 'package:education_app/Network/api_interceptor.dart';
+import 'package:education_app/Network/purchase_book_request.dart';
 import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/studentinfo.dart';
 import 'package:education_app/Network/submit_test_request.dart';
@@ -51,4 +52,12 @@ abstract class ApiClient {
   @POST("/storeResponse")
   Future<HttpResponse<String>> submitTestResults(
       @Body() SubmitTestRequest submitTestRequest);
+
+  @POST("/getLeaderBoard")
+  Future<HttpResponse<String>> getLeaderBoard(
+      @Body() QuestionsRequest questionRequest);
+
+  @POST("/addPurchase")
+  Future<HttpResponse<String>> addPurchase(
+      @Body() PurchaseBookRequest purchaseBookRequest);
 }

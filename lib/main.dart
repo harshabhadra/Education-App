@@ -1,3 +1,4 @@
+import 'package:education_app/Model/LoginResponse.dart';
 import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/database/DatabaseChapter.dart';
 import 'package:education_app/database/DatabaseLogin.dart';
@@ -14,6 +15,7 @@ Future<List<Box>> _openBox() async {
   Hive.registerAdapter(DatabaseBookAdapter());
   Hive.registerAdapter(DbChapterAdapter());
   Hive.registerAdapter(DatabaseLoginAdapter());
+  Hive.registerAdapter(LoginResponseAdapter());
   var categoryBox = await Hive.openBox("category");
   var bookBox = await Hive.openBox('books');
   var userBox = await Hive.openBox('user');

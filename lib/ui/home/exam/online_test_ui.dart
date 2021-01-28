@@ -133,10 +133,17 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
         markObtained: studentMarks,
         examDetails: answerList);
 
+    _goToReport(_submitTestRequest, questionsList);
+  }
+
+  //Go to report screen
+  void _goToReport(SubmitTestRequest _submitTestRequest,
+      List<QuestioListExamWise> _questionsList) {
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
       return TestReportScreen(
         submitTestRequest: _submitTestRequest,
-        questionsList: questionsList,
+        questionsList: _questionsList,
+        examId: widget.exam.examId,
       );
     }));
   }
@@ -175,10 +182,37 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
               Map<String, dynamic> map = snapshot.data;
               examQuestions = map['questions'];
               if (examQuestions != null) {
-                questionsList = examQuestions.questioListExamWise;
-                return questionsList.length == 0
-                    ? Center(child: Text('No Questions available'))
-                    : _buildQuestionsList(questionsList);
+                if (examQuestions.examAttened == null) {
+                  questionsList = examQuestions.questioListExamWise;
+                  return questionsList.length == 0
+                      ? Center(child: Text('No Questions available'))
+                      : _buildQuestionsList(questionsList);
+                } else {
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('You have already attended the exam'),
+                            actions: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    _goToReport(examQuestions.examAttened,
+                                        examQuestions.questioListExamWise);
+                                  },
+                                  child: Text('Show Report'),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                        barrierDismissible: false);
+                  });
+                }
+                return Container();
               } else {
                 ErrorModel errorModel = map['error'];
                 return Center(

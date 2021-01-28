@@ -16,36 +16,48 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
-  var box = Hive.box('user');
+ 
   DatabaseLogin databaseLogin;
   LoginResponse loginResponse;
   @override
   void initState() {
-    if (box.isNotEmpty) {
+     var box = Hive.box('user');
+    if (box.length>0) {
+      print('box is not empty, box length: ${box.length}');
       databaseLogin = box.getAt(0);
       LoginBloc bloc = LoginBloc();
       bloc.login(databaseLogin.email, databaseLogin.password);
       bloc.loginStream.listen((event) {
         LoginResponse response = event;
-        Future.delayed(const Duration(seconds: 3), () {
-          setState(() {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) {
-                return Home(loginResponse: response);
-              }), (route) => false);
+        bloc.getProfile();
+        bloc.profileStream.listen((event) {
+          Future.delayed(const Duration(seconds: 3), () {
+            setState(() {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushAndRemoveUntil(context,
+                    MaterialPageRoute(builder: (context) {
+                  return Home(
+                    loginResponse: response,
+                    profileResponse: event,
+                  );
+                }), (route) => false);
+              });
             });
           });
         });
       });
     } else {
+      print('box is empty, box length: ${box.length}');
       databaseLogin = null;
       Future.delayed(const Duration(seconds: 5), () {
         setState(() {
           SchedulerBinding.instance.addPostFrameCallback((_) {
             Navigator.pushAndRemoveUntil(context,
                 MaterialPageRoute(builder: (context) {
-              return WelcomePage(email: "",password: "",);
+              return WelcomePage(
+                email: "",
+                password: "",
+              );
             }), (route) => false);
           });
         });
