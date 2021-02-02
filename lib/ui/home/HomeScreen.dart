@@ -1,5 +1,6 @@
 import 'package:education_app/Bloc/profile_bloc.dart';
 import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/Model/subs_details.dart';
 import 'package:education_app/ui/home/profile_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,8 +11,9 @@ import 'package:education_app/ui/home/CategoryPage.dart';
 class Home extends StatefulWidget {
   final LoginResponse loginResponse;
   final ProfileResponse profileResponse;
+  final SubsDetails subsDetails;
 
-  const Home({Key key, this.loginResponse, this.profileResponse})
+  const Home({Key key, this.loginResponse, this.profileResponse, this.subsDetails})
       : super(key: key);
 
   @override
@@ -32,24 +34,26 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     Widget child;
-  
-      switch (_index) {
-        case 0:
-          child = CategoryPage(
-            examType: 'NEET',
-            profileResponse: _profileResponse,
-          );
-          break;
-        case 1:
-          child = CategoryPage(
-            examType: 'FMGE',
-            profileResponse: _profileResponse,
-          );
-          break;
-        case 2:
-          child = ProfileScreen();
-          break;
-      }
+
+    switch (_index) {
+      case 0:
+        child = CategoryPage(
+          examType: 'NEET',
+          profileResponse: _profileResponse,
+          subsDetails: widget.subsDetails,
+        );
+        break;
+      case 1:
+        child = CategoryPage(
+          examType: 'FMGE',
+          profileResponse: _profileResponse,
+          subsDetails: widget.subsDetails,
+        );
+        break;
+      case 2:
+        child = ProfileScreen();
+        break;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,

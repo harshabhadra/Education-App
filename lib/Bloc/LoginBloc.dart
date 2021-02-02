@@ -15,9 +15,11 @@ import 'package:hive/hive.dart';
 class LoginBloc implements Bloc {
   final _controller = StreamController<LoginResponse>.broadcast();
   final _profileController = StreamController<ProfileResponse>.broadcast();
+  final _sController = StreamController<Map<String, dynamic>>();
 
   Stream get loginStream => _controller.stream.asBroadcastStream();
   Stream get profileStream => _profileController.stream.asBroadcastStream();
+  Stream get subStream => _sController.stream;
 
   void login(String email, String password) async {
     Dio dio = Dio();
@@ -62,7 +64,6 @@ class LoginBloc implements Bloc {
           credBox.put('token', loginResponse.customToken);
           credBox.put('refreshToken', loginResponse.refreshToken);
           credBox.put('loginResponse', loginResponse);
-
         }
       }
       print(loginResponse.message.toString());
@@ -100,8 +101,16 @@ class LoginBloc implements Bloc {
     }
   }
 
+  void getSubcription(String subId) async {
+    Repository _repository = Repository();
+    var map = await _repository.getSubcription(subId);
+    _sController.sink.add(map);
+  }
+
   @override
   void dispose() {
     _controller.close();
+    _profileController.close();
+    _sController.close();
   }
 }

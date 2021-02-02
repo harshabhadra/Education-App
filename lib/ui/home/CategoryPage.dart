@@ -1,16 +1,23 @@
 import 'package:education_app/Bloc/profile_bloc.dart';
 import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/Model/subs_details.dart';
+import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:education_app/ui/home/Ebook/Ebook.dart';
 import 'package:education_app/ui/home/exam/exam_info_ui.dart';
 import 'package:education_app/ui/home/video/Video.dart';
+import 'package:lottie/lottie.dart';
 
 class CategoryPage extends StatefulWidget {
   final String examType;
   final ProfileResponse profileResponse;
+  final SubsDetails subsDetails;
   const CategoryPage(
-      {Key key, @required this.examType, @required this.profileResponse})
+      {Key key,
+      @required this.examType,
+      @required this.profileResponse,
+      this.subsDetails})
       : super(key: key);
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -20,7 +27,84 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   void initState() {
     print('profile info: ${widget.profileResponse.studentInfo.name}');
+    SubsDetails _subDetails = widget.subsDetails;
+    if (_subDetails != null) {
+      String status = _subDetails.status;
+      if (status != 'active') {
+        if (status == 'pending' || status == 'halted') {
+          _buildWarningDialog('Subscription $status',
+              'Your Subcription is $status. Update your subcriptions info or Cancel Subscription');
+        } else {
+          _buildSubStatusDialog('Subscription $status');
+        }
+      }
+    }
     super.initState();
+  }
+
+  void _buildSubStatusDialog(String title) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(title),
+            actions: [
+              RaisedButton(
+                onPressed: () {},
+                color: kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'Restart Subcription',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Close',
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+            ],
+          );
+        });
+  }
+
+  void _buildWarningDialog(String title, String message) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              RaisedButton(
+                onPressed: () {},
+                color: kPrimaryColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Text(
+                  'Update Subcription',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Cancel Subcription',
+                  style: TextStyle(color: Colors.red),
+                ),
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -77,12 +161,50 @@ class _CategoryPageState extends State<CategoryPage> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VideoPage(
-                                              examType: widget.examType,
-                                            )));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => VideoPage(
+                                //             examType: widget.examType,
+                                //             profileResponse:
+                                //                 widget.profileResponse)));
+                                Dialog _commingDialog = Dialog(
+                                  child: Container(
+                                    height: 200,
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          height: 200,
+                                          child: Image.asset(
+                                            'assets/images/coming.jpg',
+                                            fit: BoxFit.fill,
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.topLeft,
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
+                                              child: Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return _commingDialog;
+                                    });
                               },
                               child: Container(
                                 margin: EdgeInsets.only(
@@ -139,7 +261,8 @@ class _CategoryPageState extends State<CategoryPage> {
                                     MaterialPageRoute(
                                         builder: (context) => Ebook(
                                               examType: widget.examType,
-                                              profileResponse: widget.profileResponse,
+                                              profileResponse:
+                                                  widget.profileResponse,
                                             )));
                               },
                               child: Container(

@@ -2,7 +2,8 @@ import 'dart:io';
 import 'package:education_app/Model/pay_response.dart';
 import 'package:education_app/Network/payment_interceptor.dart';
 import 'package:education_app/Network/payment_request.dart';
-import 'package:retrofit/http.dart';
+import 'package:education_app/Network/sub_request.dart';
+import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'payment_Client.g.dart';
 
@@ -16,4 +17,14 @@ abstract class PaymentClient {
 
   @POST('orders')
   Future<PayResponse> paySubs(@Body() PayRequest paymentRequest);
+
+  @GET("plans")
+  Future<HttpResponse<String>> getPlans();
+
+  @POST('subscriptions')
+  Future<HttpResponse<String>> createSubscription(
+      @Body() SubsRequest subsRequest);
+
+  @GET("subscriptions/{id}")
+  Future<HttpResponse<String>> getSubciption(@Path() String id);
 }

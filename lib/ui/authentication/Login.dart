@@ -2,6 +2,7 @@ import 'package:education_app/Bloc/LoginBloc.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Model/LoginResponse.dart';
 import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/Model/subs_details.dart';
 import 'package:education_app/Network/profile_request.dart';
 import 'package:education_app/ui/authentication/StudentInfo.dart';
 import 'package:education_app/ui/components/already_have_an_account_acheck.dart';
@@ -166,7 +167,6 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
       invalidCred = false;
       bloc.loginStream.listen((event) {
         setState(() {
-          showLoading = false;
           LoginResponse loginResponse = event;
           print('Login Response in ui : ${loginResponse.message}');
           if (loginResponse.statusCode == 100) {
@@ -195,13 +195,45 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
       bloc.getProfile();
       bloc.profileStream.listen((event) {
         ProfileResponse profileResponse = event;
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushAndRemoveUntil(context,
-              MaterialPageRoute(builder: (context) {
-            return Home(loginResponse: loginResponse, profileResponse: profileResponse,);
-          }), (route) => false);
-        });
+        if (!profileResponse.studentInfo.premiumUser) {
+          setState(() {
+            showLoading = false;
+          });
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+              return Home(
+                loginResponse: loginResponse,
+                profileResponse: profileResponse,
+                subsDetails: null,
+              );
+            }), (route) => false);
+          });
+        } else {
+          _getSubInfo(profileResponse.studentInfo.subscriptionId, profileResponse, loginResponse);
+        }
       });
+    });
+  }
+
+  void _getSubInfo(String subId, ProfileResponse profileResponse, LoginResponse loginResponse) {
+    bloc.getSubcription(subId);
+    bloc.subStream.listen((event) {
+      Map<String, dynamic> map = event;
+      SubsDetails _subDetails = map['subd'];
+      setState(() {
+        showLoading = false;
+      });
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+            Navigator.pushAndRemoveUntil(context,
+                MaterialPageRoute(builder: (context) {
+              return Home(
+                loginResponse: loginResponse,
+                profileResponse: profileResponse,
+                subsDetails: _subDetails,
+              );
+            }), (route) => false);
+          });
     });
   }
 }

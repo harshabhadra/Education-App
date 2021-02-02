@@ -1,27 +1,30 @@
 import 'package:education_app/Model/Video.dart';
+import 'package:education_app/Model/profile_response.dart';
 import 'package:education_app/ui/home/video/video_play_ui.dart';
+import 'package:education_app/ui/payment/plans_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class VideoListUi extends StatefulWidget {
   final String categoryName;
   final List<VideoList> videos;
-  const VideoListUi({
-    Key key,
-    @required this.categoryName,
-    @required this.videos,
-  }) : super(key: key);
+  final ProfileResponse profileResponse;
+  const VideoListUi(
+      {Key key,
+      @required this.categoryName,
+      @required this.videos,
+      @required this.profileResponse})
+      : super(key: key);
 
   @override
   _VideoListState createState() => _VideoListState();
 }
 
 class _VideoListState extends State<VideoListUi> {
-
-
+  bool isPremium;
   @override
   void initState() {
-  
+    isPremium = widget.profileResponse.studentInfo.premiumUser;
     super.initState();
   }
 
@@ -116,14 +119,24 @@ class _VideoListState extends State<VideoListUi> {
               separatorBuilder: (context, builder) =>
                   Divider(color: Colors.grey),
               itemBuilder: (context, index) {
+                var video = videoList[index];
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => VideoPlayUi(
-                                  video: videoList.toList()[index],
-                                )));
+                    if (video.purchaseType == 'Premium' && (!isPremium)) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PlansScreen(
+                                    profileResponse: widget.profileResponse,
+                                  )));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => VideoPlayUi(
+                                    video: videoList.toList()[index],
+                                  )));
+                    }
                   },
                   child: Card(
                     color: Colors.indigo[50],

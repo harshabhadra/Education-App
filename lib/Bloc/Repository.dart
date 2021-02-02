@@ -1,16 +1,23 @@
 import 'dart:convert';
 
+import 'package:education_app/Model/SubsPlans.dart';
 import 'package:education_app/Model/Video.dart';
 import 'package:education_app/Model/error_model.dart';
 import 'package:education_app/Model/error_type.dart';
 import 'package:education_app/Model/exam_questions_model.dart';
 import 'package:education_app/Model/refresh_token_model.dart';
+import 'package:education_app/Model/student_info_response.dart';
+import 'package:education_app/Model/subs_details.dart';
+import 'package:education_app/Model/subs_response.dart';
 import 'package:education_app/Network/ApiClient.dart';
 import 'package:dio/dio.dart';
+import 'package:education_app/Network/payment_Client.dart';
 import 'package:education_app/Network/purchase_book_request.dart';
 import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/refresh_token_request.dart';
+import 'package:education_app/Network/sub_request.dart';
 import 'package:education_app/Network/submit_test_request.dart';
+import 'package:education_app/Network/update_profile_request.dart';
 import 'package:education_app/Network/video_request.dart';
 import 'package:education_app/database/DatabaseBook.dart';
 import 'package:education_app/utils/AppUtils.dart';
@@ -210,6 +217,98 @@ class Repository {
       return body;
     } catch (error) {
       print("error submitting purchase: $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+      return map;
+    }
+  }
+
+  Future<Map<String, dynamic>> getPlans() async {
+    Dio _dio = Dio();
+    PaymentClient _payClient = PaymentClient(_dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    try {
+      var response = await _payClient.getPlans();
+      print('plans response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      SubsPlans plans = SubsPlans.fromJson(body);
+      map['plans'] = plans;
+    } catch (error) {
+      print("error getting plans : $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+    }
+    return map;
+  }
+
+  Future<Map<String, dynamic>> createSubscription(
+      SubsRequest subsRequest) async {
+    Dio _dio = Dio();
+    PaymentClient _payClient = PaymentClient(_dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    try {
+      var response = await _payClient.createSubscription(subsRequest);
+      print('create subs response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      SubsResponse subsResponse = SubsResponse.fromJson(body);
+      map['subs'] = subsResponse;
+    } catch (error) {
+      print("error creating subs : $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+    }
+    return map;
+  }
+
+  Future<Map<String, dynamic>> getSubcription(String subId) async {
+    Dio _dio = Dio();
+    PaymentClient _payClient = PaymentClient(_dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    try {
+      var response = await _payClient.getSubciption(subId);
+      print('create subs response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      SubsDetails subsDetails = SubsDetails.fromJson(body);
+      map['subd'] = subsDetails;
+    } catch (error) {
+      print("error getting subs : $error");
+      ErrorModel errorModel = ErrorModel(
+          title: 'Error',
+          description: error.toString(),
+          errorType: ErrorType.APIError);
+      map['error'] = errorModel;
+    }
+    return map;
+  }
+
+  Future<Map<String, dynamic>> updateProfile(
+      UpdateProfileRequest updateProfileRequest) async {
+    Dio dio = Dio();
+    ApiClient _apiClient = ApiClient(dio);
+    Map<String, dynamic> map = new Map<String, dynamic>();
+    try {
+      var response = await _apiClient.updateStudentInfo(updateProfileRequest);
+      print('update profile response: ${response.response.data.toString()}');
+      Map<String, dynamic> body =
+          json.decode(response.response.data.toString());
+      StudentInfoResponse studentInfoResponse =
+          StudentInfoResponse.fromJson(body);
+      map['stdInfo'] = studentInfoResponse;
+      return map;
+    } catch (error) {
+      print("error updating profile: $error");
       ErrorModel errorModel = ErrorModel(
           title: 'Error',
           description: error.toString(),

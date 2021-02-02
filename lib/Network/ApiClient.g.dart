@@ -252,4 +252,25 @@ class _ApiClient implements ApiClient {
     final httpResponse = HttpResponse(value, _result);
     return httpResponse;
   }
+
+  @override
+  Future<HttpResponse<String>> updateStudentInfo(updateProfileRequest) async {
+    ArgumentError.checkNotNull(updateProfileRequest, 'updateProfileRequest');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(updateProfileRequest?.toJson() ?? <String, dynamic>{});
+    _data.removeWhere((k, v) => v == null);
+    final _result = await _dio.request<String>('/updateStudent',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'POST',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = _result.data;
+    final httpResponse = HttpResponse(value, _result);
+    return httpResponse;
+  }
 }

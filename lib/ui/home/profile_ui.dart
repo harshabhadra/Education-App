@@ -201,6 +201,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+            margin: EdgeInsets.fromLTRB(32, 16, 32, 16),
+            width: MediaQuery.of(context).size.width,
+            child: RaisedButton(
+              elevation: 8.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              onPressed: () {},
+              color: profileResponse.studentInfo.premiumUser
+                  ? Colors.red
+                  : Colors.green,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  profileResponse.studentInfo.premiumUser
+                      ? 'Cancel Premium'
+                      : 'Buy Premium',
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
+              ),
+            )),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
           child: Row(

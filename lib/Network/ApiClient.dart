@@ -9,6 +9,7 @@ import 'package:education_app/Network/purchase_book_request.dart';
 import 'package:education_app/Network/questions_request.dart';
 import 'package:education_app/Network/studentinfo.dart';
 import 'package:education_app/Network/submit_test_request.dart';
+import 'package:education_app/Network/update_profile_request.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 part 'ApiClient.g.dart';
@@ -60,4 +61,8 @@ abstract class ApiClient {
   @POST("/addPurchase")
   Future<HttpResponse<String>> addPurchase(
       @Body() PurchaseBookRequest purchaseBookRequest);
+
+  @POST("/updateStudent")
+  Future<HttpResponse<String>> updateStudentInfo(
+      @Body() UpdateProfileRequest updateProfileRequest);
 }

@@ -247,28 +247,4 @@ class _PaymentUiState extends State<PaymentUi> {
     }
   }
 
-  Widget _buildResult(PaymentBloc bloc) {
-    return StreamBuilder<PayResponse>(
-        stream: bloc.payStream,
-        builder: (context, snapdata) {
-          if (snapdata.connectionState == ConnectionState.active) {
-            if (snapdata.hasError) {
-              return Center(
-                child: Text("Error: ${snapdata.error}"),
-              );
-            } else if (snapdata.hasData) {
-              orderId = snapdata.data.id;
-              return Center(
-                child: Text("Order Id: ${snapdata.data.id}"),
-              );
-            } else {
-              return Center(
-                child: Text("CheckOut Details"),
-              );
-            }
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        });
-  }
 }

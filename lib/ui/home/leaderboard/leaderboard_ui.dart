@@ -74,7 +74,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   Widget _buildList(List<LeaderBoardList> leaderboardList) {
     return SingleChildScrollView(
       physics: ClampingScrollPhysics(),
-          child: Container(
+      child: Container(
         color: Colors.blueAccent[100],
         child: Column(
           children: [
@@ -105,6 +105,41 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                         ],
                       ),
                     ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'User',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Spacer(
+                          flex: 1,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(
+                                'Score',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.separated(
@@ -115,32 +150,38 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                           },
                           itemCount: leaderboardList.length,
                           itemBuilder: (context, index) {
-                            LeaderBoardList leaderboard = leaderboardList[index];
+                            LeaderBoardList leaderboard =
+                                leaderboardList[index];
                             return Container(
                               margin: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      "${leaderboard.email}",
-                                      style: TextStyle(
-                                        fontSize: 16.0,
+                              child: Expanded(
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "${leaderboard.email}",
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Spacer(
-                                    flex: 1,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Marks: ${leaderboard.markObtained.toString()}',
-                                      style: TextStyle(
-                                          color: Colors.green, fontSize: 18.0),
+                                    Spacer(
+                                      flex: 1,
                                     ),
-                                  )
-                                ],
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          '${leaderboard.markObtained.toString()}',
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 18.0),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             );
                           }),

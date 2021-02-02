@@ -69,6 +69,7 @@ class StudentInfo {
   String _name;
   bool _premiumUser;
   List<PurchasedBook> _purchasedBook;
+  String _subscriptionId;
 
   StudentInfo(
       {String address,
@@ -79,7 +80,8 @@ class StudentInfo {
       String gender,
       String name,
       bool premiumUser,
-      List<PurchasedBook> purchasedBook}) {
+      List<PurchasedBook> purchasedBook,
+      String subscriptionId}) {
     this._address = address;
     this._contactNumber = contactNumber;
     this._country = country;
@@ -89,6 +91,7 @@ class StudentInfo {
     this._name = name;
     this._premiumUser = premiumUser;
     this._purchasedBook = purchasedBook;
+    this._subscriptionId = subscriptionId;
   }
 
   String get address => _address;
@@ -110,6 +113,7 @@ class StudentInfo {
   List<PurchasedBook> get purchasedBook => _purchasedBook;
   set purchasedBook(List<PurchasedBook> purchasedBook) =>
       _purchasedBook = purchasedBook;
+  String get subscriptionId => _subscriptionId = subscriptionId;
 
   StudentInfo.fromJson(Map<String, dynamic> json) {
     _address = json['address'];
@@ -126,6 +130,7 @@ class StudentInfo {
         _purchasedBook.add(new PurchasedBook.fromJson(v));
       });
     }
+    _subscriptionId = json['subscriptionId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -142,6 +147,7 @@ class StudentInfo {
       data['purchasedBook'] =
           this._purchasedBook.map((v) => v.toJson()).toList();
     }
+    data['subscriptionId'] = this._subscriptionId;
     return data;
   }
 }
