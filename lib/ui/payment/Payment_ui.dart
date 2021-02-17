@@ -234,7 +234,7 @@ class _PaymentUiState extends State<PaymentUi> {
   void openCheckout() async {
     int fPrice = (widget.price) * 100;
     var options = {
-      'key': 'rzp_live_bk1vdOGpC2v8Dy',
+      'key': '',
       'amount': fPrice,
       'name': 'AKS Physiology.',
       'order_id': orderId,
