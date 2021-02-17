@@ -94,14 +94,12 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
                     hintText: "Your Email",
                     onChanged: (value) {
                       _email = value;
-                      print(value);
                     },
                   ),
                   RoundedPasswordField(
                     text: widget.password,
                     onChanged: (value) {
                       _password = value;
-                      print(value);
                     },
                   ),
                   showLoading
@@ -182,8 +180,10 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
             }
           } else if (loginResponse.statusCode == 200) {
             showNoEmail = true;
+            showLoading = false;
           } else {
             invalidCred = true;
+            showLoading = false;
           }
         });
       });
@@ -210,13 +210,15 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
             }), (route) => false);
           });
         } else {
-          _getSubInfo(profileResponse.studentInfo.subscriptionId, profileResponse, loginResponse);
+          _getSubInfo(profileResponse.studentInfo.subscriptionId,
+              profileResponse, loginResponse);
         }
       });
     });
   }
 
-  void _getSubInfo(String subId, ProfileResponse profileResponse, LoginResponse loginResponse) {
+  void _getSubInfo(String subId, ProfileResponse profileResponse,
+      LoginResponse loginResponse) {
     bloc.getSubcription(subId);
     bloc.subStream.listen((event) {
       Map<String, dynamic> map = event;
@@ -224,16 +226,16 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
       setState(() {
         showLoading = false;
       });
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushAndRemoveUntil(context,
-                MaterialPageRoute(builder: (context) {
-              return Home(
-                loginResponse: loginResponse,
-                profileResponse: profileResponse,
-                subsDetails: _subDetails,
-              );
-            }), (route) => false);
-          });
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) {
+          return Home(
+            loginResponse: loginResponse,
+            profileResponse: profileResponse,
+            subsDetails: _subDetails,
+          );
+        }), (route) => false);
+      });
     });
   }
 }

@@ -217,7 +217,7 @@ class _StudentInfoState extends State<StudentInfoUi> {
                               decoration: InputDecoration(
                                   icon: Icon(Icons.calendar_today_outlined,
                                       color: kPrimaryColor),
-                                  hintText: 'Date of Birth',
+                                  hintText: 'Date of Birth (28/02/2000)',
                                   border: InputBorder.none),
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
@@ -233,30 +233,6 @@ class _StudentInfoState extends State<StudentInfoUi> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(bottom: 10),
-                        //   child: Container(
-                        //     width: 320,
-                        //     height: 60,
-                        //     padding:
-                        //         const EdgeInsets.only(left: 30.0, right: 20.0),
-                        //     decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(25.0),
-                        //         border: Border.all()),
-                        //     child: DropdownButtonHideUnderline(
-                        //       child: DropdownButton(
-                        //           hint: Text('Exam Type'),
-                        //           value: _selectedItem1,
-                        //           items: _dropdownMenuItems1,
-                        //           onChanged: (value) {
-                        //             setState(() {
-                        //               _selectedItem1 = value;
-                        //               profDetals = _selectedItem1.name;
-                        //             });
-                        //           }),
-                        //     ),
-                        //   ),
-                        // ),
                         showLoading
                             ? Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -308,7 +284,8 @@ class _StudentInfoState extends State<StudentInfoUi> {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               Navigator.pushAndRemoveUntil(context,
                   MaterialPageRoute(builder: (context) {
-                return WelcomePage(email: widget.email, password: widget.password);
+                return WelcomePage(
+                    email: widget.email, password: widget.password);
               }), (route) => false);
             });
           } else {

@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 
 class PaymentInterceptor extends InterceptorsWrapper {
   @override
   Future onRequest(RequestOptions options) async {
-    String username = 'rzp_test_tEP3lsuIxaAzIJ';
-  String password = 'i8zSBQ0vRfnMi31DoJllgDty';
+    String username = 'rzp_live_bk1vdOGpC2v8Dy';
+  String password = 'nN1JtG2Vv1hZe0UReSJ2S9lH';
   String basicAuth =
       'Basic ' + base64Encode(utf8.encode('$username:$password'));
     options.headers['authorization'] = basicAuth;

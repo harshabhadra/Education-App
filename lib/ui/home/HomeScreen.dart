@@ -1,3 +1,4 @@
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:education_app/Bloc/profile_bloc.dart';
 import 'package:education_app/Model/profile_response.dart';
 import 'package:education_app/Model/subs_details.dart';
@@ -13,7 +14,8 @@ class Home extends StatefulWidget {
   final ProfileResponse profileResponse;
   final SubsDetails subsDetails;
 
-  const Home({Key key, this.loginResponse, this.profileResponse, this.subsDetails})
+  const Home(
+      {Key key, this.loginResponse, this.profileResponse, this.subsDetails})
       : super(key: key);
 
   @override
@@ -58,54 +60,53 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SizedBox.expand(child: child),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (newIndex) => setState(() => _index = newIndex),
-        currentIndex: _index,
+      bottomNavigationBar: BottomNavyBar(
+        onItemSelected: (newIndex) => setState(() => _index = newIndex),
+        selectedIndex: _index,
         backgroundColor: Colors.grey[50],
-        elevation: 6.0,
-        type: BottomNavigationBarType.fixed,
+        showElevation: true,
         items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/neet.png',
-              scale: 6,
-            ),
-            title: Text(
-              'NEET',
-              style: TextStyle(
-                  letterSpacing: 0.5,
-                  fontFamily: 'Varela_Round',
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black54),
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/images/fmge.png',
-              scale: 6,
-            ),
-            title: Text('FMGE',
+          BottomNavyBarItem(
+              icon: Image.asset(
+                'assets/images/neet.png',
+                scale: 6,
+              ),
+              title: Text(
+                'NEET',
                 style: TextStyle(
                     letterSpacing: 0.5,
                     fontFamily: 'Varela_Round',
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black54)),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.account_circle,
-              color: kPrimaryColor,
-            ),
-            title: Text('PROFIE',
-                style: TextStyle(
-                    letterSpacing: 0.5,
-                    fontFamily: 'Varela_Round',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black54)),
-          ),
+                    color: Colors.black54),
+              ),
+              activeColor: kPrimaryColor),
+          BottomNavyBarItem(
+              icon: Image.asset(
+                'assets/images/fmge.png',
+                scale: 6,
+              ),
+              title: Text('FMGE',
+                  style: TextStyle(
+                      letterSpacing: 0.5,
+                      fontFamily: 'Varela_Round',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54)),
+              activeColor: kPrimaryColor),
+          BottomNavyBarItem(
+              icon: Icon(
+                Icons.account_circle,
+                color: kPrimaryColor,
+              ),
+              title: Text('PROFIE',
+                  style: TextStyle(
+                      letterSpacing: 0.5,
+                      fontFamily: 'Varela_Round',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black54)),
+              activeColor: kPrimaryColor),
         ],
       ),
     );

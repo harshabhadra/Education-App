@@ -38,6 +38,7 @@ class _PaymentUiState extends State<PaymentUi> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    // bloc.getOrderId(100);
     bloc.getOrderId((widget.price) * 100);
     bloc.payStream.listen((event) {
       PayResponse response = event;
@@ -200,7 +201,7 @@ class _PaymentUiState extends State<PaymentUi> {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('${response.message}',
+              child: Text('Failed',
                   style: TextStyle(color: Colors.red, fontSize: 18.0)),
             ),
             TextButton(
@@ -233,7 +234,7 @@ class _PaymentUiState extends State<PaymentUi> {
   void openCheckout() async {
     int fPrice = (widget.price) * 100;
     var options = {
-      'key': 'rzp_test_tEP3lsuIxaAzIJ',
+      'key': 'rzp_live_bk1vdOGpC2v8Dy',
       'amount': fPrice,
       'name': 'AKS Physiology.',
       'order_id': orderId,
@@ -241,10 +242,9 @@ class _PaymentUiState extends State<PaymentUi> {
     };
 
     try {
-      _razorpay.open(options);
+       _razorpay.open(options);
     } catch (e) {
       debugPrint(e);
     }
   }
-
 }

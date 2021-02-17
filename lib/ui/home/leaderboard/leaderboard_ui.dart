@@ -4,9 +4,11 @@ import 'package:education_app/Model/error_model.dart';
 import 'package:education_app/Model/leaderboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hive/hive.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   final int examId;
+
   LeaderBoardScreen({Key key, this.examId}) : super(key: key);
 
   @override
@@ -15,10 +17,17 @@ class LeaderBoardScreen extends StatefulWidget {
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   LeaderBoardBloc _bloc = LeaderBoardBloc();
+  String email;
+  ScrollController _controller;
+  String userPosition;
 
   @override
   void initState() {
     _bloc.getLeaderBoard(widget.examId);
+    var box = Hive.box('cred');
+    email = box.get('email');
+    _controller = ScrollController();
+
     super.initState();
   }
 
@@ -57,7 +66,6 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   child: Text(errorModel.description),
                 );
               }
-              return Container();
             } else {
               return Center(
                 child: CircularProgressIndicator(),
@@ -72,6 +80,11 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   }
 
   Widget _buildList(List<LeaderBoardList> leaderboardList) {
+    for (int i = 0; i < leaderboardList.length; i++) {
+      if (leaderboardList[i].email == email) {
+        userPosition = (i + 1).toString();
+      }
+    }
     return SingleChildScrollView(
       physics: ClampingScrollPhysics(),
       child: Container(
@@ -96,12 +109,23 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Leader Board',
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
-                              )),
+                          Row(
+                            children: [
+                              Text('Leader Board',
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  )),
+                              Spacer(),
+                              Text('Your Position: $userPosition',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ))
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -143,6 +167,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.separated(
+                          controller: _controller,
                           shrinkWrap: true,
                           physics: ScrollPhysics(),
                           separatorBuilder: (context, index) {
@@ -153,35 +178,59 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                             LeaderBoardList leaderboard =
                                 leaderboardList[index];
                             return Container(
+                              color: leaderboard.email == email
+                                  ? Colors.greenAccent
+                                  : Colors.white,
                               margin: EdgeInsets.all(8.0),
-                              child: Expanded(
-                                child: Row(
-                                  children: [
-                                    Padding(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        "${leaderboard.email}",
+                                        (index + 1).toString(),
                                         style: TextStyle(
-                                          fontSize: 16.0,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        child: Text(
+                                          "${leaderboard.email}",
+                                          style: TextStyle(
+                                            fontSize: 16.0,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    Spacer(
-                                      flex: 1,
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                  ),
+                                  Spacer(
+                                    flex: 1,
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
                                         child: Text(
                                           '${leaderboard.markObtained.toString()}',
                                           style: TextStyle(
-                                              color: Colors.green,
+                                              color: leaderboard.email == email
+                                                  ? Colors.black
+                                                  : Colors.green,
+                                              fontWeight: FontWeight.w600,
                                               fontSize: 18.0),
                                         ),
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                             );
                           }),

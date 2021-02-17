@@ -1,4 +1,4 @@
-package com.example.education_app
+package com.aksphysiology.aksphysiology
 
 import io.flutter.embedding.android.FlutterActivity
 // import android.view.WindowManager.LayoutParams

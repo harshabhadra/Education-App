@@ -6,6 +6,7 @@ import 'package:education_app/Model/exam_info.dart';
 import 'package:education_app/Model/exam_questions_model.dart';
 import 'package:education_app/Network/submit_test_request.dart';
 import 'package:education_app/ui/home/exam/test_report_ui.dart';
+import 'package:education_app/ui/home/leaderboard/leaderboard_ui.dart';
 import 'package:education_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -148,6 +149,12 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
     }));
   }
 
+  void _goToLeaderBoard() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return LeaderBoardScreen(examId: widget.exam.examId);
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -194,14 +201,14 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
                         builder: (context) {
                           return AlertDialog(
                             title: Text('You have already attended the exam'),
+                            content: Text('Go To Leader Board'),
                             actions: [
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
-                                    _goToReport(examQuestions.examAttened,
-                                        examQuestions.questioListExamWise);
+                                    _goToLeaderBoard();
                                   },
                                   child: Text('Show Report'),
                                 ),

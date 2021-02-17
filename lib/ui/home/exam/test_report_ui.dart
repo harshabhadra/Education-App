@@ -10,12 +10,13 @@ class TestReportScreen extends StatefulWidget {
   final SubmitTestRequest submitTestRequest;
   final List<QuestioListExamWise> questionsList;
   final int examId;
-  TestReportScreen(
-      {Key key,
-      @required this.submitTestRequest,
-      @required this.questionsList,
-      @required this.examId})
-      : super(key: key);
+
+  TestReportScreen({
+    Key key,
+    @required this.submitTestRequest,
+    @required this.questionsList,
+    @required this.examId,
+  }) : super(key: key);
 
   @override
   _TestReportScreenState createState() => _TestReportScreenState();
@@ -31,7 +32,9 @@ class _TestReportScreenState extends State<TestReportScreen> {
     print('Questions list size: ${widget.questionsList.length}');
     print('Answers List size: ${answersList.length}');
     bloc = OnlineTestBloc();
+
     bloc.submitTestReport(widget.submitTestRequest);
+
     super.initState();
   }
 
