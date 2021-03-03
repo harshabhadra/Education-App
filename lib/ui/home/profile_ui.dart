@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           CircleAvatar(
               radius: 45,
               backgroundColor: kPrimaryColor,
-              child: profileResponse.studentInfo.gender == 'M'
+              child: profileResponse.studentInfo.gender == 'Male'
                   ? SvgPicture.asset('assets/images/male_avatar.svg')
                   : SvgPicture.asset('assets/images/female_avatar.svg')),
           Padding(
@@ -239,14 +239,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
           child: Text(
             'Address: ' + profileResponse.studentInfo.address,
             style: TextStyle(fontSize: 18),
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
           child: Text(
             'Country: ' + profileResponse.studentInfo.country,
             style: TextStyle(fontSize: 20),

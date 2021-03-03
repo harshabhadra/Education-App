@@ -5,9 +5,9 @@ class PaymentInterceptor extends InterceptorsWrapper {
   @override
   Future onRequest(RequestOptions options) async {
     String username = '';
-  String password = '';
-  String basicAuth =
-      'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String password = '';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
     options.headers['authorization'] = basicAuth;
     return options;
   }

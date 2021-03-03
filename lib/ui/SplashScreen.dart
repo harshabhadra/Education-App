@@ -16,13 +16,12 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
- 
   DatabaseLogin databaseLogin;
   LoginResponse loginResponse;
   @override
   void initState() {
-     var box = Hive.box('user');
-    if (box.length>0) {
+    var box = Hive.box('user');
+    if (box.length > 0) {
       print('box is not empty, box length: ${box.length}');
       databaseLogin = box.getAt(0);
       LoginBloc bloc = LoginBloc();
@@ -69,28 +68,29 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kPrimaryColor,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(32, 64, 32, 64),
-              child: Image.asset('assets/images/splash.jpg'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Study Doc',
-                style: TextStyle(fontSize: 24, color: Colors.white),
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Image.asset('assets/icon/app_icon.png'),
               ),
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 64),
-              child: Center(
-                child: CircularProgressIndicator(backgroundColor: Colors.white),
-              ),
-            )
-          ],
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                        backgroundColor: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

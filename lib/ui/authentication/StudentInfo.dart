@@ -51,7 +51,7 @@ class _StudentInfoState extends State<StudentInfoUi> {
   GlobalKey<FormState> _key = GlobalKey();
   List<ListItem> _dropdownItems = [
     ListItem(1, "Male"),
-    ListItem(3, "Female"),
+    ListItem(2, "Female"),
     //ListItem(4, "Fourth Item")
   ];
 

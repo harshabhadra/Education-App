@@ -85,31 +85,28 @@ class _EBookDetailsState extends State<EBookDetails> {
                     width: double.infinity,
                     height: 180,
                     child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 24),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              '${widget.ebook.bookName}',
-                              style: TextStyle(
-                                  fontFamily: 'Varela_Round',
-                                  fontSize: 48,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              '${widget.ebook.author}',
-                              style: TextStyle(
-                                  fontFamily: 'Varela_Round',
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.ebook.bookName}',
+                            style: TextStyle(
+                                fontFamily: 'Varela_Round',
+                                fontSize: 24,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${widget.ebook.author}',
+                            style: TextStyle(
+                                fontFamily: 'Varela_Round',
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
                   ),
