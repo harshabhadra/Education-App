@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 class ChapterUi extends StatefulWidget {
   final String url;
@@ -17,13 +16,8 @@ class ChapterUi extends StatefulWidget {
 class _ChapterUiState extends State<ChapterUi> {
   String pdfPath = '';
 
-  Future<void> secureScreen()async{
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
-
   @override
   void initState() {
-    secureScreen();
     super.initState();
   }
 
