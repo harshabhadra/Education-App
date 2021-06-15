@@ -15,7 +15,10 @@ class SignUpBloc implements Bloc {
     SignUpResponse signUpResponse;
     SignUp signUp = SignUp(email: email, password: password);
     try {
+      print("sign up email:${email}, password: ${password}");
       signUpResponse = await apiClient.signUpUser(signUp);
+      print(
+          "sign up response in bloc: ${signUpResponse.toJson().toString()}");
       _controller.sink.add(signUpResponse);
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");

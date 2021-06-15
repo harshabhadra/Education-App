@@ -24,7 +24,7 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
   ExamQuestionsBloc bloc = ExamQuestionsBloc();
   CountDownController _countDownController;
   String totalMarks;
-  int studentMarks = 0;
+  double studentMarks = 0;
   bool canSubmit = false;
   Exam _exam;
   String _groupValue;
@@ -131,7 +131,7 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
         email: email,
         examId: _exam.examId,
         totalMark: int.parse(_exam.totalMark),
-        markObtained: studentMarks,
+        markObtained: studentMarks.toInt(),
         examDetails: answerList);
 
     _goToReport(_submitTestRequest, questionsList);
@@ -401,7 +401,7 @@ class _OnlineTestScreenState extends State<OnlineTestScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
-          questioListExamWise.questionImage != ""
+          questioListExamWise.questionImage != null
               ? Image.network(
                   questioListExamWise.questionImage,
                   width: MediaQuery.of(context).size.width,

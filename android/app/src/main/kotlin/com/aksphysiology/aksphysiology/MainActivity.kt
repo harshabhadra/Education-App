@@ -1,8 +1,17 @@
 package com.aksphysiology.aksphysiology
 
+import android.os.Bundle
+import android.view.WindowManager
 import io.flutter.embedding.android.FlutterActivity
-// import android.view.WindowManager.LayoutParams
+
 
 class MainActivity: FlutterActivity() {
-// getWindow().addFlags(LayoutParams.FLAG_SECURE);
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SECURE,
+            WindowManager.LayoutParams.FLAG_SECURE
+        )
+    }
 }

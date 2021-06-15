@@ -1,9 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:education_app/Bloc/LoginBloc.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Model/LoginResponse.dart';
 import 'package:education_app/Model/profile_response.dart';
 import 'package:education_app/Model/subs_details.dart';
-import 'package:education_app/Network/profile_request.dart';
 import 'package:education_app/ui/authentication/StudentInfo.dart';
 import 'package:education_app/ui/components/already_have_an_account_acheck.dart';
 import 'package:education_app/ui/components/rounded_button.dart';
@@ -13,9 +13,9 @@ import 'package:education_app/ui/home/HomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:dio/dio.dart';
 
 bool showLoading = false;
+
 loginUi(BuildContext context, Size size, String email, String password) {
   showModalBottomSheet(
       context: context,
@@ -62,8 +62,8 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
     showLoading = false;
     showNoEmail = false;
     invalidCred = false;
-    _email = widget.email;
-    _password = widget.password;
+    _email = widget.email.trim();
+    _password = widget.password.trim();
     super.initState();
   }
 
@@ -113,7 +113,7 @@ class _loginBottomSheetState extends State<loginBottomSheet> {
                             if (_key.currentState.validate()) {
                               _key.currentState.save();
                               showWidget(bloc);
-                              bloc.login(_email, _password);
+                              bloc.login(_email.trim(), _password.trim());
                             }
                           },
                         ),

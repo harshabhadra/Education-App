@@ -45,10 +45,10 @@ class _VideoPlayUiState extends State<VideoPlayUi> {
         body: SafeArea(
           child: Column(
             children: [
-              VimeoPlayer(
-                id: id,
-                autoPlay: true,
-              ),
+              // VimeoPlayer(
+              //   id: id,
+              //   autoPlay: true,
+              // ),
               Text(
                 widget.video.title,
                 style: TextStyle(

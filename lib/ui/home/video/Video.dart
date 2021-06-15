@@ -1,23 +1,22 @@
 import 'package:dio/dio.dart';
+import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Bloc/viedeos_bloc.dart';
 import 'package:education_app/Model/Video.dart';
 import 'package:education_app/Model/error_model.dart';
 import 'package:education_app/Model/profile_response.dart';
+import 'package:education_app/ui/home/video/VideoList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:random_color/random_color.dart';
-import 'package:velocity_x/velocity_x.dart';
-import 'package:education_app/Bloc/bloc_provider.dart';
-import 'package:education_app/ui/home/video/VideoList.dart';
 
 class VideoPage extends StatefulWidget {
   final String examType;
   final ProfileResponse profileResponse;
-  const VideoPage({
-    Key key,
-    @required this.examType,
-    @required this.profileResponse
-  }) : super(key: key);
+
+  const VideoPage(
+      {Key key, @required this.examType, @required this.profileResponse})
+      : super(key: key);
+
   @override
   _VideoPageState createState() => _VideoPageState();
 }
@@ -140,10 +139,9 @@ class _VideoPageState extends State<VideoPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => VideoListUi(
-                                    categoryName: catList[index],
-                                    videos: _videos,
-                                    profileResponse: widget.profileResponse
-                                  )));
+                                  categoryName: catList[index],
+                                  videos: _videos,
+                                  profileResponse: widget.profileResponse)));
                     },
                     child: Card(
                       color: _randomColor.randomColor(
@@ -156,8 +154,8 @@ class _VideoPageState extends State<VideoPage> {
                               BorderRadius.all(Radius.circular(16.0))),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: ZStack(
-                          [
+                        child: Column(
+                          children: [
                             Container(
                               alignment: Alignment.center,
                               child: Padding(

@@ -19,7 +19,7 @@ abstract class ApiClient {
   factory ApiClient(Dio dio) {
     dio.options = BaseOptions(receiveTimeout: 50000, connectTimeout: 50000);
     dio.interceptors.add(ApiInterceptor());
-    return _ApiClient(dio, baseUrl: "http://arnabbhadra29.pythonanywhere.com");
+    return _ApiClient(dio, baseUrl: "https://aksphysiology.pythonanywhere.com/");
   }
 
   @POST("/signup")

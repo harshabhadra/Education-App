@@ -203,83 +203,100 @@ class _EbookState extends State<Ebook> {
     bool isChapter = false;
 
     RandomColor _randomColor = RandomColor();
-    return AnimationLimiter(
-      child: GridView.count(
-        physics: ScrollPhysics(),
-        shrinkWrap: true,
-        crossAxisCount: 2,
-        children: List.generate(books.length, (index) {
-          books[index].listOfChapter.isNotEmpty
-              ? isChapter = true
-              : isChapter = false;
-          return AnimationConfiguration.staggeredGrid(
-            position: index,
-            duration: const Duration(milliseconds: 1000),
-            columnCount: 2,
-            child: ScaleAnimation(
-              child: FadeInAnimation(
-                child: InkWell(
-                  splashColor: Colors.white,
-                  onTap: () {
-                    if (isChapter) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => EBookDetails(
-                                ebook: books[index],
-                                pBookList: widget
-                                    .profileResponse.studentInfo.purchasedBook,
-                              )));
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(16)),
-                      child: Container(
-                        color: _randomColor.randomColor(
-                            colorBrightness: ColorBrightness.primary,
-                            colorSaturation: ColorSaturation.lowSaturation,
-                            colorHue: ColorHue.multiple(
-                                colorHues: [ColorHue.blue, ColorHue.purple])),
-                        child: Stack(children: [
-                          Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.all(10.0),
-                            child: Text(
-                              '${books[index].bookName}',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Varela_Round',
-                                  fontSize: 20),
-                            ),
-                          ),
-                          if (!isChapter)
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                margin: EdgeInsets.all(8),
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 8, left: 8, top: 4, bottom: 4),
-                                  child: Text('COMING SOON',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: 'Varela_Round',
-                                          fontSize: 16)),
-                                ),
+    if (books.isNotEmpty) {
+      return AnimationLimiter(
+        child: GridView.count(
+          physics: ScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          children: List.generate(books.length, (index) {
+            books[index].listOfChapter.isNotEmpty
+                ? isChapter = true
+                : isChapter = false;
+            return AnimationConfiguration.staggeredGrid(
+              position: index,
+              duration: const Duration(milliseconds: 1000),
+              columnCount: 2,
+              child: ScaleAnimation(
+                child: FadeInAnimation(
+                  child: InkWell(
+                    splashColor: Colors.white,
+                    onTap: () {
+                      if (isChapter) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => EBookDetails(
+                                  ebook: books[index],
+                                  pBookList: widget.profileResponse.studentInfo
+                                      .purchasedBook,
+                                )));
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        child: Container(
+                          color: _randomColor.randomColor(
+                              colorBrightness: ColorBrightness.primary,
+                              colorSaturation: ColorSaturation.lowSaturation,
+                              colorHue: ColorHue.multiple(
+                                  colorHues: [ColorHue.blue, ColorHue.purple])),
+                          child: Stack(children: [
+                            Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.all(10.0),
+                              child: Text(
+                                '${books[index].bookName}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Varela_Round',
+                                    fontSize: 20),
                               ),
-                            )
-                        ]),
+                            ),
+                            if (!isChapter)
+                              Align(
+                                alignment: Alignment.topCenter,
+                                child: Container(
+                                  margin: EdgeInsets.all(8),
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 8, left: 8, top: 4, bottom: 4),
+                                    child: Text('COMING SOON',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: 'Varela_Round',
+                                            fontSize: 16)),
+                                  ),
+                                ),
+                              )
+                          ]),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
+            );
+          }),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0),
+              child: Text(
+                "No Books Available",
+                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w600),
+              ),
             ),
-          );
-        }),
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildPurchasedList() {

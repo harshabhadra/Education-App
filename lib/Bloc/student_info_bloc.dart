@@ -21,6 +21,8 @@ class StudentInfoBloc implements Bloc {
       await apiClient.setStudentInfo(studentInfo).then((value) {
         studentInfoResponse = value;
         _controller.sink.add(studentInfoResponse);
+      }).catchError((error){
+        print("error setting student info: ${error.toString()}");
       });
     } catch (error, stacktrace) {
       print("Exception occurred: $error stackTrace: $stacktrace");

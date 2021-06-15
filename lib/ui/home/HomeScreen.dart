@@ -24,7 +24,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _index = 0;
-  ProfileBloc _bloc = ProfileBloc();
   ProfileResponse _profileResponse;
 
   @override
@@ -35,80 +34,51 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
-
-    switch (_index) {
-      case 0:
-        child = CategoryPage(
-          examType: 'NEET',
-          profileResponse: _profileResponse,
-          subsDetails: widget.subsDetails,
-        );
-        break;
-      case 1:
-        child = CategoryPage(
-          examType: 'FMGE',
-          profileResponse: _profileResponse,
-          subsDetails: widget.subsDetails,
-        );
-        break;
-      case 2:
-        child = ProfileScreen();
-        break;
-    }
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SizedBox.expand(child: child),
-      bottomNavigationBar: BottomNavyBar(
-        onItemSelected: (newIndex) => setState(() => _index = newIndex),
-        selectedIndex: _index,
-        backgroundColor: Colors.grey[50],
-        showElevation: true,
-        items: [
-          BottomNavyBarItem(
-              icon: Image.asset(
-                'assets/images/neet.png',
-                scale: 6,
+    return SafeArea(
+      child: Scaffold(
+          body: DefaultTabController(
+        length: 3,
+        initialIndex: 0,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 30,
               ),
-              title: Text(
-                'NEET',
-                style: TextStyle(
-                    letterSpacing: 0.5,
-                    fontFamily: 'Varela_Round',
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black54),
-              ),
-              activeColor: kPrimaryColor),
-          BottomNavyBarItem(
-              icon: Image.asset(
-                'assets/images/fmge.png',
-                scale: 6,
-              ),
-              title: Text('FMGE',
-                  style: TextStyle(
-                      letterSpacing: 0.5,
-                      fontFamily: 'Varela_Round',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54)),
-              activeColor: kPrimaryColor),
-          BottomNavyBarItem(
-              icon: Icon(
-                Icons.account_circle,
-                color: kPrimaryColor,
-              ),
-              title: Text('PROFIE',
-                  style: TextStyle(
-                      letterSpacing: 0.5,
-                      fontFamily: 'Varela_Round',
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black54)),
-              activeColor: kPrimaryColor),
-        ],
-      ),
+              TabBar(labelColor: Colors.black, tabs: [
+                Tab(
+                  text: "NEET",
+                ),
+                Tab(
+                  text: "FMGE",
+                ),
+                Tab(
+                  text: "PROFILE",
+                )
+              ]),
+              Container(
+                  height:
+                      MediaQuery.of(context).size.height, //height of TabBarView
+                  decoration: BoxDecoration(
+                      border: Border(
+                          top: BorderSide(color: Colors.grey, width: 0.5))),
+                  child: TabBarView(children: [
+                    CategoryPage(
+                      examType: 'NEET',
+                      profileResponse: _profileResponse,
+                      subsDetails: widget.subsDetails,
+                    ),
+                    CategoryPage(
+                      examType: 'FMGE',
+                      profileResponse: _profileResponse,
+                      subsDetails: widget.subsDetails,
+                    ),
+                    ProfileScreen()
+                  ]))
+            ],
+          ),
+        ),
+      )),
     );
   }
 

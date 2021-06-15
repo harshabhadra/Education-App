@@ -30,6 +30,7 @@ class LoginBloc implements Bloc {
     Login login = Login(email: email, password: password);
 
     try {
+      print("input email: ${email}, password: ${password}");
       var value = await apiClient.loginUser(login);
       print("log in response: " + value.response.data);
 

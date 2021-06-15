@@ -1,19 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:education_app/Bloc/SignUpBloc.dart';
 import 'package:education_app/Bloc/bloc_provider.dart';
 import 'package:education_app/Model/SignUpResponse.dart';
 import 'package:education_app/ui/authentication/StudentInfo.dart';
 import 'package:education_app/ui/components/already_have_an_account_acheck.dart';
-import 'package:education_app/ui/components/or_divider.dart';
 import 'package:education_app/ui/components/rounded_button.dart';
 import 'package:education_app/ui/components/rounded_input_field.dart';
 import 'package:education_app/ui/components/rounded_password_field.dart';
-import 'package:education_app/ui/components/social_icon.dart';
-import 'package:education_app/ui/welcome/welcomepage.dart';
-import 'package:education_app/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/scheduler.dart';
 
 SignUpUi(BuildContext context, Size size) {
   showModalBottomSheet(
@@ -106,7 +101,7 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
                             press: () {
                               if (_key.currentState.validate()) {
                                 _key.currentState.save();
-                                bloc.signUp(_email, _password, dio);
+                                bloc.signUp(_email.trim(), _password.trim(), dio);
                                 _showLoader(bloc);
                               }
                             },
@@ -164,7 +159,6 @@ class _SignUpBottomSheetState extends State<SignUpBottomSheet> {
         SignUpResponse response = event;
         print("Sign up response: ${response.message}");
         if (response.statusCode == 100) {
-
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return StudentInfoUi(
               email: _email,

@@ -54,7 +54,7 @@ class _PlansScreenState extends State<PlansScreen> {
 
   void openCheckout(int amount, String subId) async {
     var options = {
-      'key': '',
+      'key': 'rzp_live_bk1vdOGpC2v8Dy',
       'name': 'AKS Physiology.',
       'subscription_id': subId,
       'subscription_card_change':true,
